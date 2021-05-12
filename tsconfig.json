@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6", "dom"],
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "strict": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["node"],
+    "paths": {
+      "@interface/*": ["interface/*"],
+      "@entity/*": ["src/entity/*"],
+      "@middleware/*": ["middleware/*"]
+    }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
