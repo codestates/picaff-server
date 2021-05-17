@@ -30,9 +30,13 @@ export default class Item {
   @Column()
   type!: string;
 
-  @OneToMany(() => TestResult, (testResult) => testResult._id)
+  // @OneToMany(() => TestResult, (testResult) => testResult._id)
+  // itemResult!: TestResult[];
+  // @OneToMany(() => TestResult, (testResult) => testResult._id)
+  // coffeeResult!: TestResult[];
+  @OneToMany(() => TestResult, (testResult) => testResult.itemType)
   itemResult!: TestResult[];
-  @OneToMany(() => TestResult, (testResult) => testResult._id)
+  @OneToMany(() => TestResult, (testResult) => testResult.coffeeType)
   coffeeResult!: TestResult[];
 
   @OneToMany(() => Like, (like) => like.item)
