@@ -2,6 +2,7 @@
   "compilerOptions": {
     "lib": ["es5", "es6", "dom"],
     "target": "es5",
+    //변경하는게 어떤지?
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
@@ -20,7 +21,8 @@
       "@interface/*": ["interface/*"],
       "@entity/*": ["src/entity/*"],
       "@middleware/*": ["middleware/*"]
-    }
+    },
+    "noImplicitAny": false // ts에서 anytype사용 가능
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
