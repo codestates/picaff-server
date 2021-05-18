@@ -1,16 +1,10 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Item from "./Item.entity";
 
 @Entity()
 export default class CoffeeCharacter {
   @PrimaryGeneratedColumn()
-  _id!: number;
+  id!: number;
 
   @Column()
   sweetness!: number;

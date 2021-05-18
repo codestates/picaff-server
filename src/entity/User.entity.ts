@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
@@ -13,7 +12,7 @@ import TestResult from "./TestResult.entity";
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn()
-  _id!: number;
+  id!: number;
 
   @Column()
   email!: string;
@@ -35,8 +34,4 @@ export default class User {
 
   @OneToMany(() => Like, (like) => like.user)
   likes!: Like[];
-  // @OneToMany(() => , (like) => like.user )
-  // likes!:
-  // @OneToMany(() => Like, (like) => like.user)
-  // likes!: User[];
 }
