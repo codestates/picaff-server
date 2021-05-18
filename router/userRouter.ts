@@ -1,4 +1,7 @@
 import express from "express";
+import { userController } from "@controllers/index";
 const router = express.Router();
 
-module.exports = router;
+router.post("/email", userController.mail);
+router.get("/", userController.get);
+export default router;

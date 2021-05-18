@@ -20,7 +20,8 @@
     "paths": {
       "@interface/*": ["interface/*"],
       "@entity/*": ["src/entity/*"],
-      "@middleware/*": ["middleware/*"]
+      "@middleware/*": ["middleware/*"],
+      "@controllers/*": ["controllers/*"]
     },
     "noImplicitAny": false // ts에서 anytype사용 가능
   },

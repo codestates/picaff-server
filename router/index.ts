@@ -1,8 +1,3 @@
-import express from "express";
-const router = express.Router();
-
-router.use('/user', require('./userRouter'));
-router.use('/item', require('./itemRouter'));
-router.use('/test', require('./testRouter'));
-
-export default router;
+export { default as userRouter } from "./userRouter";
+export { default as itemRouter } from "./itemRouter";
+export { default as testRouter } from "./testRouter";
