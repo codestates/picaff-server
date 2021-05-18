@@ -22,8 +22,8 @@ export default class TestResult {
   @Column({ default: null })
   userId!: number;
 
-  @ManyToOne(() => Item, (item) => item.itemResult, {
-    nullable: false, // migration 위해 임시로 true로 바꿔둠
+  @ManyToOne(() => Item, (item) => item.itemResults, {
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "itemTypeId" })
@@ -31,8 +31,8 @@ export default class TestResult {
   @Column({ default: null })
   itemTypeId!: number;
 
-  @ManyToOne(() => Item, (item) => item.coffeeResult, {
-    nullable: false, // migration 위해 임시로 true로 바꿔둠
+  @ManyToOne(() => Item, (item) => item.coffeeResults, {
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "coffeeTypeId" })

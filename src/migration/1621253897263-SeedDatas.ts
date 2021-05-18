@@ -4,7 +4,7 @@ import { CategoryDataSeed } from "../seeds/category.seed";
 import { ItemDataSeed } from "../seeds/item.seed";
 import { CoffeeCharacterDataSeed } from "../seeds/coffeeCharacter.seed";
 import { ItemCharacterDataSeed } from "../seeds/itemCharacter.seed";
-import { LikeDataSeed } from "../seeds/like.seed";
+import { LikedDataSeed } from "../seeds/liked.seed";
 import { TagDataSeed } from "../seeds/tag.seed";
 import { TagItemDataSeed } from "../seeds/tagItem.seed";
 import { TestResultDataSeed } from "../seeds/testResult.seed";
@@ -20,20 +20,20 @@ export class SeedDatas1621253897263 implements MigrationInterface {
     await getRepository("ItemCharacter").save(ItemCharacterDataSeed);
     await getRepository("Tag").save(TagDataSeed);
     await getRepository("Item").save(ItemDataSeed);
-    await getRepository("Like").save(LikeDataSeed);
+    await getRepository("Liked").save(LikedDataSeed);
     await getRepository("TagItem").save(TagItemDataSeed);
     await getRepository("TestResult").save(TestResultDataSeed);
     await query;
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query("DROP TABLE user");
-    await queryRunner.query("DROP TABLE category");
-    await queryRunner.query("DROP TABLE item");
-    await queryRunner.query("DROP TABLE coffeeCharacter");
-    await queryRunner.query("DROP TABLE like");
-    await queryRunner.query("DROP TABLE tag");
-    await queryRunner.query("DROP TABLE tagItem");
-    await queryRunner.query("DROP TABLE testResult");
+    await queryRunner.query("DROP TABLE USER");
+    await queryRunner.query("DROP TABLE CATEGORY");
+    await queryRunner.query("DROP TABLE ITEM");
+    await queryRunner.query("DROP TABLE COFFEECHARACTER");
+    await queryRunner.query("DROP TABLE LIKED");
+    await queryRunner.query("DROP TABLE TAG");
+    await queryRunner.query("DROP TABLE TAGITEM");
+    await queryRunner.query("DROP TABLE TESTRESULT");
   }
 }

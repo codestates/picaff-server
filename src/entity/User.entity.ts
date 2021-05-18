@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
 } from "typeorm";
-import Like from "./Like.entity";
+import Liked from "./Liked.entity";
 import TestResult from "./TestResult.entity";
 
 @Entity()
@@ -32,6 +32,6 @@ export default class User {
   @OneToMany(() => TestResult, (testResult) => testResult.user)
   testResults!: TestResult[];
 
-  @OneToMany(() => Like, (like) => like.user)
-  likes!: Like[];
+  @OneToMany(() => Liked, (liked) => liked.user)
+  likeds!: Liked[];
 }

@@ -9,7 +9,7 @@ import {
 import Category from "./Category.entity";
 import ItemCharacter from "./CoffeeCharacter.entity";
 import CoffeeCharacter from "./ItemCharacter.entity";
-import Like from "./Like.entity";
+import Liked from "./Liked.entity";
 import TagItem from "./TagItem.entity";
 import TestResult from "./TestResult.entity";
 
@@ -31,18 +31,18 @@ export default class Item {
   type!: string;
 
   @OneToMany(() => TestResult, (testResult) => testResult.itemType)
-  itemResult!: TestResult[];
+  itemResults!: TestResult[];
   @OneToMany(() => TestResult, (testResult) => testResult.coffeeType)
-  coffeeResult!: TestResult[];
+  coffeeResults!: TestResult[];
 
-  @OneToMany(() => Like, (like) => like.item)
-  likes!: Like[];
+  @OneToMany(() => Liked, (liked) => liked.item)
+  likeds!: Liked[];
 
   @OneToMany(() => TagItem, (tagItem) => tagItem.item)
   tagItems!: TagItem[];
 
   @ManyToOne(() => Category, (category) => category.items, {
-    nullable: false, // false로 바꾸는 법 생각할 것.
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "categoryId" })

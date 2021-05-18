@@ -1,4 +1,4 @@
-export const LikeDataSeed = [
+export const LikedDataSeed = [
   {
     userId: 1,
     itemId: 1,

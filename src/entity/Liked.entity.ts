@@ -9,11 +9,11 @@ import Item from "./Item.entity";
 import User from "./User.entity";
 
 @Entity()
-export default class Like {
+export default class Liked {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => User, (user) => user.likes, {
+  @ManyToOne(() => User, (user) => user.likeds, {
     nullable: true,
     onDelete: "CASCADE",
   })
@@ -22,7 +22,7 @@ export default class Like {
   @Column({ default: null })
   userId!: number;
 
-  @ManyToOne(() => Item, (item) => item.likes, {
+  @ManyToOne(() => Item, (item) => item.likeds, {
     nullable: false,
     onDelete: "CASCADE",
   })
