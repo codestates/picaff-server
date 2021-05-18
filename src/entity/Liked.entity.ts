@@ -6,24 +6,24 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import Item from "./Item.entity";
-import Tag from "./Tag.entity";
+import User from "./User.entity";
 
 @Entity()
-export default class TagItem {
+export default class Liked {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => Tag, (tag) => tag.tagItems, {
-    nullable: false, // migration시 nullable True로 생성됨.
+  @ManyToOne(() => User, (user) => user.likeds, {
+    nullable: true,
     onDelete: "CASCADE",
   })
-  @JoinColumn({ name: "tagId" })
-  tag!: Tag;
+  @JoinColumn({ name: "userId" })
+  user!: User;
   @Column({ default: null })
-  tagId!: number;
+  userId!: number;
 
-  @ManyToOne(() => Item, (item) => item.tagItems, {
-    nullable: false, // migration시 nullable True로 생성됨.
+  @ManyToOne(() => Item, (item) => item.likeds, {
+    nullable: false,
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "itemId" })

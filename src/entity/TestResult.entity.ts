@@ -3,34 +3,40 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import User from "./User.entity";
 import Item from "./Item.entity";
-// import { Item } from "./Item.entity";
 
 @Entity()
 export default class TestResult {
   @PrimaryGeneratedColumn()
-  _id!: number;
+  id!: number;
 
   @ManyToOne(() => User, (user) => user.testResults, {
     nullable: true,
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "userId" })
   user!: User;
+  @Column({ default: null })
+  userId!: number;
 
-  @ManyToOne(() => Item, (item) => item.itemResult, {
-    nullable: false,
+  @ManyToOne(() => Item, (item) => item.itemResults, {
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "itemTypeId" })
   itemType!: Item;
+  @Column({ default: null })
+  itemTypeId!: number;
 
-  @ManyToOne(() => Item, (item) => item.coffeeResult, {
-    nullable: false,
+  @ManyToOne(() => Item, (item) => item.coffeeResults, {
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "coffeeTypeId" })
   coffeeType!: Item;
+  @Column({ default: null })
+  coffeeTypeId!: number;
 }

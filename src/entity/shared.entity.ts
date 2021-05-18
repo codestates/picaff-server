@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export default class Shared {
   @PrimaryColumn()
-  _id!: number;
+  id!: number;
+
   @Column()
   count!: number;
 }

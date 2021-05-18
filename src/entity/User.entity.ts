@@ -1,19 +1,18 @@
 import {
   Column,
   Entity,
-  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   OneToMany,
 } from "typeorm";
-import Like from "./Like.entity";
+import Liked from "./Liked.entity";
 import TestResult from "./TestResult.entity";
 
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn()
-  _id!: number;
+  id!: number;
 
   @Column()
   email!: string;
@@ -33,10 +32,6 @@ export default class User {
   @OneToMany(() => TestResult, (testResult) => testResult.user)
   testResults!: TestResult[];
 
-  @OneToMany(() => Like, (like) => like.user)
-  likes!: Like[];
-  // @OneToMany(() => , (like) => like.user )
-  // likes!:
-  // @OneToMany(() => Like, (like) => like.user)
-  // likes!: User[];
+  @OneToMany(() => Liked, (liked) => liked.user)
+  likeds!: Liked[];
 }

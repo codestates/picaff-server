@@ -1,22 +1,22 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import Category from "./Category.entity";
 import ItemCharacter from "./CoffeeCharacter.entity";
 import CoffeeCharacter from "./ItemCharacter.entity";
-import Like from "./Like.entity";
+import Liked from "./Liked.entity";
 import TagItem from "./TagItem.entity";
 import TestResult from "./TestResult.entity";
 
 @Entity()
 export default class Item {
   @PrimaryGeneratedColumn()
-  _id!: number;
+  id!: number;
 
   @Column()
   itemName!: string;
@@ -30,32 +30,34 @@ export default class Item {
   @Column()
   type!: string;
 
-  // @OneToMany(() => TestResult, (testResult) => testResult._id)
-  // itemResult!: TestResult[];
-  // @OneToMany(() => TestResult, (testResult) => testResult._id)
-  // coffeeResult!: TestResult[];
   @OneToMany(() => TestResult, (testResult) => testResult.itemType)
-  itemResult!: TestResult[];
+  itemResults!: TestResult[];
   @OneToMany(() => TestResult, (testResult) => testResult.coffeeType)
-  coffeeResult!: TestResult[];
+  coffeeResults!: TestResult[];
 
-  @OneToMany(() => Like, (like) => like.item)
-  likes!: Like[];
+  @OneToMany(() => Liked, (liked) => liked.item)
+  likeds!: Liked[];
 
   @OneToMany(() => TagItem, (tagItem) => tagItem.item)
   tagItems!: TagItem[];
 
   @ManyToOne(() => Category, (category) => category.items, {
-    nullable: false,
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "categoryId" })
   category!: Category;
+  @Column({ default: null })
+  categoryId!: number;
 
   @ManyToOne(() => ItemCharacter, (itemCharacter) => itemCharacter.items, {
     nullable: true,
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "itemCharacterId" })
   itemCharacter!: ItemCharacter;
+  @Column({ default: null })
+  itemCharacterId!: number;
 
   @ManyToOne(
     () => CoffeeCharacter,
@@ -65,5 +67,8 @@ export default class Item {
       onDelete: "CASCADE",
     }
   )
+  @JoinColumn({ name: "coffeeCharacterId" })
   coffeeCharacter!: CoffeeCharacter;
+  @Column({ default: null })
+  coffeeCharacterId!: number;
 }

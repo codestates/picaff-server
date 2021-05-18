@@ -1,15 +1,10 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import TagItem from "./TagItem.entity";
+
 @Entity()
 export default class Tag {
   @PrimaryGeneratedColumn()
-  _id!: number;
+  id!: number;
 
   @Column()
   tagName!: string;
