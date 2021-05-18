@@ -14,7 +14,7 @@ export default class TagItem {
   id!: number;
 
   @ManyToOne(() => Tag, (tag) => tag.tagItems, {
-    nullable: false,
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "tagId" })
@@ -23,7 +23,7 @@ export default class TagItem {
   tagId!: number;
 
   @ManyToOne(() => Item, (item) => item.tagItems, {
-    nullable: false,
+    nullable: false, // migration시 nullable True로 생성됨.
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "itemId" })

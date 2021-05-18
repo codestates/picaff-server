@@ -10,7 +10,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "allowJs": true,
-    "strict": true, // false to migrate?
+    "strict": true,
     "baseUrl": ".",
     "esModuleInterop": true,
     "skipLibCheck": true,
