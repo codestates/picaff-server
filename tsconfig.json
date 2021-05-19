@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es5", "es6", "dom"],
-    "target": "es5",
-    //변경하는게 어떤지?
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
@@ -20,7 +19,8 @@
     "paths": {
       "@interface/*": ["interface/*"],
       "@entity/*": ["src/entity/*"],
-      "@middleware/*": ["middleware/*"]
+      "@middleware/*": ["middleware/*"],
+      "@controllers/*": ["controllers/*"]
     },
     "noImplicitAny": false // ts에서 anytype사용 가능
   },
