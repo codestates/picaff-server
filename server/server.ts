@@ -1,10 +1,9 @@
 import express, { Request, Response } from "express";
+import corsOption from "../middleware/cors";
 import cors from "cors";
 import { userRouter } from "../router/index";
 import { createConnection, Connection } from "typeorm";
 import "dotenv";
-import corsOption from "@middleware/cors";
-import { google, drive_v3, Auth, Common } from "googleapis";
 
 const app = express();
 
