@@ -21,18 +21,11 @@ const token = {
       userName: userName,
       email: email,
     }
-    const RefreshToken = jwt.sign(userInfo, REFRESH_SECRET!, {expiresIn: '1h'})
+    const RefreshToken = jwt.sign(userInfo, REFRESH_SECRET!, {expiresIn: '10h'})
     return RefreshToken;
   },
   verifyToken(token: string) {
-    // const verifyToken:tokenUser = jwt.verify(token, ACCESS_SECRET!);
-    jwt.verify(token, ACCESS_SECRET!, (authorizedData, err) => {
-      if(err) return err;
-      else{
-        return authorizedData;
-      }
-    })
-    // return jwt.verify(token, ACCESS_SECRET!);
+    return jwt.verify(token, ACCESS_SECRET!);
   }
 }
 

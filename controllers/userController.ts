@@ -5,5 +5,5 @@ export default {
   signup,
   signin,
   mail,
-  // signout
+  signout
 };
