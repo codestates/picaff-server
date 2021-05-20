@@ -16,7 +16,7 @@ const googleOauth = async (req: Request, res: Response) => {
       idToken: myToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     })
-    const payload = ticket.getPayload() as TokenPayload // 객체분해를 해서 하는 방법, if로 해서 하는방법이 있다. if가 일반적이다.
+    const payload = ticket.getPayload() as TokenPayload
     const email = payload['email']
     const userName = payload['name']
     const password = payload['sub'] // 114431990724931021242 // 21자리의 Google 회원 id 번호
