@@ -1,8 +1,9 @@
 import { Response, Request } from "express";
-import { signup, mail } from "./user/userHandler";
+import { signIn, signUp, mail, googleOauth } from "./user/userHandler";
 
 export default {
-  signup,
-  // signin,
+  signUp,
+  signIn,
   mail,
+  googleOauth,
 };

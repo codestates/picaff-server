@@ -1,4 +1,5 @@
-export { default as signup } from "./signup"
-export { default as mail } from "./mail"
-// export { default as signin } from "./signin"
+export { default as signUp } from "./signUp";
+export { default as mail } from "./mail";
+export { default as googleOauth } from "./googleOauth";
+export { default as signIn } from "./singIn";
 // export { default as signout } from "./signout"

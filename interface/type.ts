@@ -1,3 +1,11 @@
-export type User = {
-  id?: number;
+export type tokenUser = {
+  id: number;
+  userName: String;
+  email: String;
+};
+export type allUserInfo = {
+  id: Number;
+  userName: String;
+  email: String;
+  password: String;
 };
