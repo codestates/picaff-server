@@ -6,7 +6,7 @@ import {
   googleOauth,
   signOff,
   modification,
-  // addTest,
+  addTest,
   // userInfo,
 } from './user/userHandler'
 
@@ -18,6 +18,6 @@ export default {
   googleOauth,
   signOff,
   modification,
-  // addTest,
+  addTest,
   // userInfo,
 }
