@@ -1,36 +1,36 @@
-import nodemail from "nodemailer";
-import dotenv from "dotenv";
-import { Response, Request } from "express";
+import nodemail from 'nodemailer'
+import dotenv from 'dotenv'
+import { Response, Request } from 'express'
 
-dotenv.config();
+dotenv.config()
 const makeSerial = (): string => {
-  let number = Math.floor(Math.random() * 1000000) + 100000;
+  let number = Math.floor(Math.random() * 1000000) + 100000
   if (number > 1000000) {
-    number = number - 100000;
+    number = number - 100000
   }
-  return number.toString();
-};
+  return number.toString()
+}
 
 const mail = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email } = req.body
   //이미 존재하는 메일 여부 체크 유저정보에서 확인해서 예외처리
-  const serialnum = makeSerial();
+  const serialnum = makeSerial()
   let transporter = nodemail.createTransport({
-    service: "gmail",
+    service: 'gmail',
     port: 587,
-    host: "smtp.gmail.com",
+    host: 'smtp.gmail.com',
     secure: false,
     requireTLS: true,
     auth: {
-      user: "picaffAuth@gmail.com",
+      user: 'picaffAuth@gmail.com',
       pass: process.env.MAIL_PASSWORD,
     },
-  });
+  })
 
   await transporter.sendMail({
     from: '"Picaff 당신의 커피 취향을 알아보세요" <PicaffAuth@gamil.com>',
     to: `${email}`,
-    subject: "[Picaff] email 인증요청",
+    subject: '[Picaff] email 인증요청',
     html: `
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
     <tr>
@@ -47,14 +47,14 @@ const mail = async (req: Request, res: Response) => {
     `,
     attachments: [
       {
-        filename: "logo1.png",
-        path: __dirname + "/logo1.png",
-        cid: "logo1.png",
+        filename: 'logo1.png',
+        path: __dirname + '/logo1.png',
+        cid: 'logo1.png',
       },
     ],
-  });
+  })
 
-  res.status(201).send({ serialnum });
+  res.status(201).send({ serialnum })
 }
 
-export default mail;
+export default mail
