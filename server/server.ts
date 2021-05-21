@@ -1,14 +1,13 @@
 import express, { Request, Response } from "express";
-import corsOption from "../middleware/cors";
 import cors from "cors";
 import { userRouter } from "../router/index";
 import { createConnection, Connection } from "typeorm";
 import "dotenv";
+import corsOption from "@middleware/cors";
 
 const app = express();
 
 /* Connect to Mysql */
-
 createConnection()
   .then(async (connection: Connection) =>
     console.log("Entity connected : ", connection.isConnected)

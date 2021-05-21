@@ -2,7 +2,6 @@
   "compilerOptions": {
     "lib": ["es5", "es6", "dom"],
     "target": "es6",
-    //변경하는게 어떤지?
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
