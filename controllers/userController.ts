@@ -5,7 +5,7 @@ import {
   signOut,
   googleOauth,
   signOff,
-  // modification,
+  modification,
   // addTest,
   // userInfo,
 } from './user/userHandler'
@@ -17,7 +17,7 @@ export default {
   signOut,
   googleOauth,
   signOff,
-  // modification,
+  modification,
   // addTest,
   // userInfo,
 }
