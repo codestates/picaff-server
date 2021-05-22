@@ -35,7 +35,3 @@ export default class User {
   @OneToMany(() => Liked, (liked) => liked.user)
   likeds!: Liked[];
 }
-
-// "start": "tsc && ts-node -r tsconfig-paths/register server/index.ts",
-// "migration": "npx ts-node ./node_modules/typeorm/cli.js migration:run"
-// "start": "nodemon --watch server --delay 1 --exec 'ts-node' server/index.ts",

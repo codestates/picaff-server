@@ -1,15 +1,21 @@
+export type userInfo = {
+  id: number
+  userName: string
+  email: string
+};
+export type allUserInfo = {
+  id: number
+  userName: string
+  email: string
+  password: string
+}
 export type tokenUser = {
   id: number
-  userName: String
-  email: String
-}
-export type allUserInfo = {
-  id: Number
-  userName: String
-  email: String
-  password: String
-}
-
+  userName: string
+  email: string
+  iat: number
+  exp: number
+};
 export type TokenPayload = {
   iss: string
   at_hash?: string
