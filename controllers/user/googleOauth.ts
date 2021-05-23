@@ -3,59 +3,62 @@ import token from '@middleware/jwt'
 import 'dotenv/config'
 import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
-import { OAuth2Client } from 'google-auth-library'
-import { TokenPayload } from '@interface/type'
+import { LoginTicket, OAuth2Client } from 'google-auth-library'
+import { error } from 'console'
+import { default as interfaces } from '@interface/index'
 
 const googleOauth = async (req: Request, res: Response) => {
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
   const userRepository = getRepository(User)
   const myToken: string = req.body.id_token
+
   async function verify() {
-    console.log('Veryfing your token....')
-    const ticket = await client.verifyIdToken({
+    const ticket: LoginTicket = await client.verifyIdToken({
       idToken: myToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     })
-    const payload = ticket.getPayload() as TokenPayload // 객체분해를 해서 하는 방법, if로 해서 하는방법이 있다. if가 일반적이다.
-    const email = payload['email']
-    const userName = payload['name']
-    const password = payload['sub'] // 114431990724931021242 // 21자리의 Google 회원 id 번호
+    const payload = ticket.getPayload()
 
-    if (payload.email_verified) {
-      const checkUser = await userRepository.find({ where: { email: email } })
-      if (checkUser.length > 0) {
-        console.log('this user exists in DB: ', email)
-        const checkPassword = await (checkUser[0].password === password)
-        if (checkPassword) {
-          const accessToken = token.generateAccessToken(
-            checkUser[0]!.id,
-            checkUser[0]!.email,
-            checkUser[0]!.userName
-          )
-          const refreshToken = token.generateRefreshToken(
-            checkUser[0]!.id,
-            checkUser[0]!.email,
-            checkUser[0]!.userName
-          )
-          console.log('logged in')
-          res
-            .status(200)
-            .cookie('refreshToken', refreshToken, { httpOnly: true })
-            .send({
-              data: {
-                id: checkUser[0]!.id,
-                userName: checkUser[0]!.userName,
-                email: checkUser[0]!.email,
+    if (typeof payload !== 'undefined') {
+      const email = payload['email']!
+      const userName = payload['name']!
+      const password = payload['sub']! // 21자리의 Google 회원 id 번호
+
+      if (payload.email_verified) {
+        // const checkUser = await userRepository.find({ where: { email: email } })
+        const checkUser = await interfaces.checkUser(email)
+        if (checkUser) {
+          console.log('checkUser', checkUser)
+          console.log('checkUser[0]', checkUser[0])
+          const checkPassword = await (checkUser[0].password === password)
+
+          if (checkPassword) {
+            const accessToken = token.generateAccessToken(
+              checkUser[0].id,
+              checkUser[0].email,
+              checkUser[0].userName
+            )
+            const refreshToken = token.generateRefreshToken(
+              checkUser[0].id,
+              checkUser[0].email,
+              checkUser[0].userName
+            )
+            res
+              .status(200)
+              .cookie('refreshToken', refreshToken, { httpOnly: true })
+              .send({
+                id: checkUser[0].id,
+                userName: checkUser[0].userName,
+                email: checkUser[0].email,
                 auth: {
                   accessToken: accessToken,
                 },
-              },
-            })
+              })
+          } else throw error('payload undefined...')
         } else {
           res.status(404).send('log-in failed')
         }
       } else {
-        console.log('writing the userInfo in DB....')
         const user: User = new User()
         user.userName = userName
         user.email = email
@@ -65,35 +68,35 @@ const googleOauth = async (req: Request, res: Response) => {
         const userInfo = await userRepository.findOne({
           where: { email: email },
         })
-        const accessToken = token.generateAccessToken(
-          userInfo!.id,
-          userInfo!.email,
-          userInfo!.userName
-        )
-        const refreshToken = token.generateRefreshToken(
-          userInfo!.id,
-          userInfo!.email,
-          userInfo!.userName
-        )
-        console.log('sign up & log in completed.')
-        res
-          .status(201)
-          .cookie('refreshToken', refreshToken, { httpOnly: true })
-          .send({
-            data: {
-              id: userInfo!.id,
-              userName: userInfo!.userName,
-              email: userInfo!.email,
+
+        if (typeof userInfo !== 'undefined') {
+          const accessToken = token.generateAccessToken(
+            userInfo.id,
+            userInfo.email,
+            userInfo.userName
+          )
+          const refreshToken = token.generateRefreshToken(
+            userInfo.id,
+            userInfo.email,
+            userInfo.userName
+          )
+
+          res
+            .status(201)
+            .cookie('refreshToken', refreshToken, { httpOnly: true })
+            .send({
+              id: userInfo.id,
+              userName: userInfo.userName,
+              email: userInfo.email,
               auth: {
                 accessToken: accessToken,
               },
-            },
-          })
+            })
+        } else throw error('userInfo not exists')
       }
     }
   }
   verify().catch((err) => {
-    console.log('expired token.')
     res.status(401).send('Unauthroized. Token used too late.')
   })
 }
