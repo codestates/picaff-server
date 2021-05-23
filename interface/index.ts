@@ -2,7 +2,10 @@ import { getRepository, getConnection } from 'typeorm'
 import User from '@entity/User.entity'
 import TestResult from '@entity/TestResult.entity'
 import { tokenUser } from './type'
+<<<<<<< HEAD
 import { default as interfaces } from '@interface/index'
+=======
+>>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
 
 export default {
   isCheckUser: async (target: string) => {
@@ -14,7 +17,10 @@ export default {
       return true
     }
   },
+<<<<<<< HEAD
 
+=======
+>>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
   pickUserInfo: async (target: string) => {
     const allTable = getRepository(User)
     const userInfo = await allTable.findOne({ where: { email: target } })
@@ -80,6 +86,7 @@ export default {
       }
     }
   },
+<<<<<<< HEAD
 
   checkUser: async (target: string | number) => {
     const userEntity = getRepository(User)
@@ -90,4 +97,6 @@ export default {
       return true
     }
   },
+=======
+>>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
 }

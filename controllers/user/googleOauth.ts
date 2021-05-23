@@ -17,7 +17,14 @@ const googleOauth = async (req: Request, res: Response) => {
       idToken: myToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     })
+<<<<<<< HEAD
     const payload = ticket.getPayload()
+=======
+    const payload = ticket.getPayload() as TokenPayload
+    const email = payload['email']
+    const userName = payload['name']
+    const password = payload['sub'] // 114431990724931021242 // 21자리의 Google 회원 id 번호
+>>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
 
     if (typeof payload !== 'undefined') {
       const email = payload['email']!
