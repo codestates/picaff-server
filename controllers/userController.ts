@@ -7,7 +7,7 @@ import {
   kakaoOauth,
   signOff,
   modification,
-  // addTest,
+  addTest,
   // userInfo,
 } from './user/userHandler'
 
@@ -20,6 +20,6 @@ export default {
   kakaoOauth,
   signOff,
   modification,
-  // addTest,
+  addTest,
   // userInfo,
 }
