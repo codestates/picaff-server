@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import Category from './Category.entity'
-import ItemCharacter from './CoffeeCharacter.entity'
-import CoffeeCharacter from './ItemCharacter.entity'
+import ProductCharacter from './ProductCharacter.entity'
+import CoffeeCharacter from './CoffeeCharacter.entity'
 import Liked from './Liked.entity'
 import TagItem from './TagItem.entity'
 import TestResult from './TestResult.entity'
@@ -23,9 +23,6 @@ export default class Item {
   @Column()
   type!: string
 
-  @Column()
-  imageUrl!: string
-
   @OneToMany(() => TestResult, (testResult) => testResult.itemType)
   itemResults!: TestResult[]
   @OneToMany(() => TestResult, (testResult) => testResult.coffeeType)
@@ -46,14 +43,14 @@ export default class Item {
   @Column({ default: null })
   categoryId!: number
 
-  @ManyToOne(() => ItemCharacter, (itemCharacter) => itemCharacter.items, {
+  @ManyToOne(() => ProductCharacter, (productCharacter) => productCharacter.items, {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'itemCharacterId' })
-  itemCharacter!: ItemCharacter
+  @JoinColumn({ name: 'productCharacterId' })
+  productCharacter!: ProductCharacter
   @Column({ default: null })
-  itemCharacterId!: number
+  productCharacterId!: number
 
   @ManyToOne(() => CoffeeCharacter, (coffeeCharacter) => coffeeCharacter.items, {
     nullable: true,
