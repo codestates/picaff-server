@@ -2,10 +2,6 @@ import { getRepository, getConnection } from 'typeorm'
 import User from '@entity/User.entity'
 import TestResult from '@entity/TestResult.entity'
 import { tokenUser } from './type'
-<<<<<<< HEAD
-import { default as interfaces } from '@interface/index'
-=======
->>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
 
 export default {
   isCheckUser: async (target: string) => {
@@ -17,13 +13,10 @@ export default {
       return true
     }
   },
-<<<<<<< HEAD
 
-=======
->>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
-  pickUserInfo: async (target: string) => {
-    const allTable = getRepository(User)
-    const userInfo = await allTable.findOne({ where: { email: target } })
+  getUserInfo: async (target: string) => {
+    const userEntity = getRepository(User)
+    const userInfo = await userEntity.findOne({ where: { email: target } })
     if (typeof userInfo === 'undefined') {
       throw new Error('잘못된 회원 정보입니다.')
     } else {
@@ -86,17 +79,44 @@ export default {
       }
     }
   },
-<<<<<<< HEAD
 
-  checkUser: async (target: string | number) => {
+  createUser: async (email: string, userName: string, password: string) => {
+    const user: User = new User()
+    user.email = email
+    user.userName = userName
+    user.password = password
+    await getRepository(User).save(user)
+    return user
+  },
+
+  createOauthUser: async (email: number, userName: string, password: string) => {
+    const user: User = new User()
+    const changeEmailType = `'${email}'`
+    user.email = changeEmailType
+    user.userName = userName
+    user.password = password
+    await getRepository(User).save(user)
+    return user
+  },
+
+  getKakaoUserInfo: async (target: string | number) => {
     const userEntity = getRepository(User)
     const userInfo = await userEntity.findOne({ where: { email: target } })
     if (typeof userInfo === 'undefined') {
-      return false
+      return undefined
     } else {
-      return true
+      return userInfo
     }
   },
-=======
->>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
+  getProduct: async () => {
+    await getConnection().createQueryBuilder()
+    // .where("item.name = :item", { name: "Timber" })
+  },
+
+  //   generate accessToken
+  //   const accessToken = token.generateAccessToken(
+  //     checkUser[0].id,
+  //     checkUser[0].email,
+  //     checkUser[0].userName
+  //   )
 }

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import token from '@middleware/jwt'
 import axios from 'axios'
-import { getRepository } from 'typeorm'
-import User from '../../src/entity/User.entity'
+import { default as interfaces } from '@interface/index'
+import { kakaoProperties } from '@interface/type'
 
 const kakaoOauth = async (req: Request, res: Response) => {
-  const access_token: string = req.body
+  const access_token: string = req.body.access_token
 
   const verifyTokenInfo = await axios({
     method: 'POST',
@@ -16,70 +16,61 @@ const kakaoOauth = async (req: Request, res: Response) => {
     },
   })
 
-  if (verifyTokenInfo.status === 200) {
-    const { id, properties } = verifyTokenInfo.data
-    const userRepository = getRepository(User)
-    const checkUser = await userRepository.find({ where: { email: id } })
+  const id: string = verifyTokenInfo.data.id
+  const properties: kakaoProperties = verifyTokenInfo.data.properties
 
-    if (checkUser.length > 0) {
+  if (verifyTokenInfo.status === 200) {
+    const checkUser = await interfaces.getKakaoUserInfo('kakaoUser' + id)
+    console.log(checkUser)
+    if (checkUser) {
       const accessToken = token.generateAccessToken(
-        checkUser[0].id,
-        checkUser[0].email,
-        checkUser[0].userName
+        checkUser.id,
+        checkUser.email,
+        checkUser.userName
       )
       const refreshToken = token.generateRefreshToken(
-        checkUser[0].id,
-        checkUser[0].email,
-        checkUser[0].userName
+        checkUser.id,
+        checkUser.email,
+        checkUser.userName
       )
       res
         .status(200)
         .cookie('refreshToken', refreshToken, { httpOnly: true })
         .send({
-          id: checkUser[0].id,
-          userName: checkUser[0].userName,
-          email: checkUser[0].email,
+          id: checkUser.id,
+          userName: checkUser.userName,
+          email: checkUser.email,
           auth: {
             accessToken: accessToken,
           },
         })
     } else {
-      const user: User = new User()
-      user.userName = properties.nickname
-      user.email = id
-      user.password = 'kakaoOauth'
-      await userRepository.save(user)
-
-      const userInfo = await userRepository.findOne({
-        where: { email: id },
-      })
-
-      if (typeof userInfo !== 'undefined') {
+      await interfaces.createUser('kakaoUser' + `${id}`, properties.nickname, 'kakaoOauth')
+      const oauthUserInfo = await interfaces.getKakaoUserInfo('kakaoUser' + id)
+      if (oauthUserInfo !== undefined) {
         const accessToken = token.generateAccessToken(
-          userInfo.id,
-          userInfo.email,
-          userInfo.userName
+          oauthUserInfo.id,
+          oauthUserInfo.email,
+          oauthUserInfo.userName
         )
         const refreshToken = token.generateRefreshToken(
-          userInfo.id,
-          userInfo.email,
-          userInfo.userName
+          oauthUserInfo.id,
+          oauthUserInfo.email,
+          oauthUserInfo.userName
         )
         res
           .status(201)
           .cookie('refreshToken', refreshToken, { httpOnly: true })
           .send({
-            id: userInfo.id,
-            userName: userInfo.userName,
-            email: userInfo.email,
+            id: oauthUserInfo.id,
+            userName: oauthUserInfo.userName,
+            email: oauthUserInfo.email,
             auth: {
               accessToken: accessToken,
             },
           })
       }
     }
-  } else {
-    res.status(401).send('Invalid access token.')
   }
 }
 

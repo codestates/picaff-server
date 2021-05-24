@@ -1,5 +1,9 @@
-import { Response, Request } from "express";
+import { getProduct, getCoffee, sharing, addLiked, getTag } from './item/itemHandler'
 
 export default {
-  get: (res: Response, rep: Request) => {},
-};
+  getProduct,
+  getCoffee,
+  sharing,
+  addLiked,
+  getTag,
+}

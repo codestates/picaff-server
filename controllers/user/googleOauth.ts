@@ -1,15 +1,12 @@
-import User from '../../src/entity/User.entity'
 import token from '@middleware/jwt'
 import 'dotenv/config'
 import { Request, Response } from 'express'
-import { getRepository } from 'typeorm'
 import { LoginTicket, OAuth2Client } from 'google-auth-library'
 import { error } from 'console'
 import { default as interfaces } from '@interface/index'
 
 const googleOauth = async (req: Request, res: Response) => {
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-  const userRepository = getRepository(User)
   const myToken: string = req.body.id_token
 
   async function verify() {
@@ -17,14 +14,7 @@ const googleOauth = async (req: Request, res: Response) => {
       idToken: myToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     })
-<<<<<<< HEAD
     const payload = ticket.getPayload()
-=======
-    const payload = ticket.getPayload() as TokenPayload
-    const email = payload['email']
-    const userName = payload['name']
-    const password = payload['sub'] // 114431990724931021242 // 21자리의 Google 회원 id 번호
->>>>>>> e3eabf463d6dcb940451ddd940d6e4b063391014
 
     if (typeof payload !== 'undefined') {
       const email = payload['email']!
@@ -32,31 +22,27 @@ const googleOauth = async (req: Request, res: Response) => {
       const password = payload['sub']! // 21자리의 Google 회원 id 번호
 
       if (payload.email_verified) {
-        // const checkUser = await userRepository.find({ where: { email: email } })
-        const checkUser = await interfaces.checkUser(email)
+        const checkUser = await interfaces.getUserInfo(email)
         if (checkUser) {
-          console.log('checkUser', checkUser)
-          console.log('checkUser[0]', checkUser[0])
-          const checkPassword = await (checkUser[0].password === password)
-
+          const checkPassword = await (checkUser.password === password)
           if (checkPassword) {
             const accessToken = token.generateAccessToken(
-              checkUser[0].id,
-              checkUser[0].email,
-              checkUser[0].userName
+              checkUser.id,
+              checkUser.email,
+              checkUser.userName
             )
             const refreshToken = token.generateRefreshToken(
-              checkUser[0].id,
-              checkUser[0].email,
-              checkUser[0].userName
+              checkUser.id,
+              checkUser.email,
+              checkUser.userName
             )
             res
               .status(200)
               .cookie('refreshToken', refreshToken, { httpOnly: true })
               .send({
-                id: checkUser[0].id,
-                userName: checkUser[0].userName,
-                email: checkUser[0].email,
+                id: checkUser.id,
+                userName: checkUser.userName,
+                email: checkUser.email,
                 auth: {
                   accessToken: accessToken,
                 },
@@ -66,40 +52,31 @@ const googleOauth = async (req: Request, res: Response) => {
           res.status(404).send('log-in failed')
         }
       } else {
-        const user: User = new User()
-        user.userName = userName
-        user.email = email
-        user.password = password
-        await userRepository.save(user)
+        await interfaces.createUser(email, userName, password)
+        const userInfo = await interfaces.getUserInfo(email)
 
-        const userInfo = await userRepository.findOne({
-          where: { email: email },
-        })
+        const accessToken = token.generateAccessToken(
+          userInfo.id,
+          userInfo.email,
+          userInfo.userName
+        )
+        const refreshToken = token.generateRefreshToken(
+          userInfo.id,
+          userInfo.email,
+          userInfo.userName
+        )
 
-        if (typeof userInfo !== 'undefined') {
-          const accessToken = token.generateAccessToken(
-            userInfo.id,
-            userInfo.email,
-            userInfo.userName
-          )
-          const refreshToken = token.generateRefreshToken(
-            userInfo.id,
-            userInfo.email,
-            userInfo.userName
-          )
-
-          res
-            .status(201)
-            .cookie('refreshToken', refreshToken, { httpOnly: true })
-            .send({
-              id: userInfo.id,
-              userName: userInfo.userName,
-              email: userInfo.email,
-              auth: {
-                accessToken: accessToken,
-              },
-            })
-        } else throw error('userInfo not exists')
+        res
+          .status(201)
+          .cookie('refreshToken', refreshToken, { httpOnly: true })
+          .send({
+            id: userInfo.id,
+            userName: userInfo.userName,
+            email: userInfo.email,
+            auth: {
+              accessToken: accessToken,
+            },
+          })
       }
     }
   }
