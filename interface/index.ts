@@ -99,7 +99,7 @@ export default {
     return user
   },
 
-  getKakaoUserInfo: async (target: string | number) => {
+  getKakaoUserInfo: async (target: string) => {
     const userEntity = getRepository(User)
     const userInfo = await userEntity.findOne({ where: { email: target } })
     if (typeof userInfo === 'undefined') {

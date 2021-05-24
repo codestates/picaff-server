@@ -1,8 +1,8 @@
-import { getProduct, getCoffee, sharing, addLiked, getTag } from './item/itemHandler'
+import { getItem, getAllItems, sharing, addLiked, getTag } from './item/itemHandler'
 
 export default {
-  getProduct,
-  getCoffee,
+  getItem,
+  getAllItems,
   sharing,
   addLiked,
   getTag,

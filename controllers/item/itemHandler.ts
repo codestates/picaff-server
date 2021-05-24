@@ -1,5 +1,5 @@
-export { default as getProduct } from './getProduct'
-export { default as getCoffee } from './getCoffee'
+export { default as getItem } from './getItem'
 export { default as sharing } from './shareItem'
 export { default as addLiked } from './addLiked'
 export { default as getTag } from './getTag'
+export { default as getAllItems } from './getAllItems'
