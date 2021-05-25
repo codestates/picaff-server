@@ -30,6 +30,11 @@ const token = {
     if (typeof userInfo === 'object') return userInfo as tokenUser
     else throw error('String err')
   },
+  verifyRefreshToken(token: string) {
+    const userInfo = jwt.verify(token, REFRESH_SECRET!)
+    if (typeof userInfo === 'object') return userInfo as tokenUser
+    else throw error('String err')
+  },
 }
 
 export default token
