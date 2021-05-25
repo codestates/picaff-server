@@ -1,74 +1,63 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import Category from "./Category.entity";
-import ItemCharacter from "./CoffeeCharacter.entity";
-import CoffeeCharacter from "./ItemCharacter.entity";
-import Liked from "./Liked.entity";
-import TagItem from "./TagItem.entity";
-import TestResult from "./TestResult.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import Category from './Category.entity'
+import ProductCharacter from './ProductCharacter.entity'
+import CoffeeCharacter from './CoffeeCharacter.entity'
+import Liked from './Liked.entity'
+import TagItem from './TagItem.entity'
+import TestResult from './TestResult.entity'
 
 @Entity()
 export default class Item {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
 
   @Column()
-  itemName!: string;
+  itemName!: string
 
   @Column()
-  itemPrice!: number;
+  itemPrice!: number
 
   @Column()
-  itemDetail!: string;
+  itemDetail!: string
 
   @Column()
-  type!: string;
+  type!: string
 
   @OneToMany(() => TestResult, (testResult) => testResult.itemType)
-  itemResults!: TestResult[];
+  itemResults!: TestResult[]
   @OneToMany(() => TestResult, (testResult) => testResult.coffeeType)
-  coffeeResults!: TestResult[];
+  coffeeResults!: TestResult[]
 
   @OneToMany(() => Liked, (liked) => liked.item)
-  likeds!: Liked[];
+  likeds!: Liked[]
 
   @OneToMany(() => TagItem, (tagItem) => tagItem.item)
-  tagItems!: TagItem[];
+  tagItems!: TagItem[]
 
   @ManyToOne(() => Category, (category) => category.items, {
     nullable: false, // migration시 nullable True로 생성됨.
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: "categoryId" })
-  category!: Category;
+  @JoinColumn({ name: 'categoryId' })
+  category!: Category
   @Column({ default: null })
-  categoryId!: number;
+  categoryId!: number
 
-  @ManyToOne(() => ItemCharacter, (itemCharacter) => itemCharacter.items, {
+  @ManyToOne(() => ProductCharacter, (productCharacter) => productCharacter.items, {
     nullable: true,
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: "itemCharacterId" })
-  itemCharacter!: ItemCharacter;
+  @JoinColumn({ name: 'productCharacterId' })
+  productCharacter!: ProductCharacter
   @Column({ default: null })
-  itemCharacterId!: number;
+  productCharacterId!: number
 
-  @ManyToOne(
-    () => CoffeeCharacter,
-    (coffeeCharacter) => coffeeCharacter.items,
-    {
-      nullable: true,
-      onDelete: "CASCADE",
-    }
-  )
-  @JoinColumn({ name: "coffeeCharacterId" })
-  coffeeCharacter!: CoffeeCharacter;
+  @ManyToOne(() => CoffeeCharacter, (coffeeCharacter) => coffeeCharacter.items, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'coffeeCharacterId' })
+  coffeeCharacter!: CoffeeCharacter
   @Column({ default: null })
-  coffeeCharacterId!: number;
+  coffeeCharacterId!: number
 }

@@ -11,7 +11,7 @@ const signOff = async (req: Request, res: Response) => {
     const accessToken = req.headers.authorization.split(' ')[1]
     try {
       const verifyToken = token.verifyToken(accessToken)
-      const userInfo = await interfaces.pickUserInfo(verifyToken.email)
+      const userInfo = await interfaces.getUserInfo(verifyToken.email)
       if (req.body.password === userInfo.password) {
         await getConnection()
           .createQueryBuilder()

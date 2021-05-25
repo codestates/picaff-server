@@ -13,9 +13,10 @@ export default {
       return true
     }
   },
-  pickUserInfo: async (target: string) => {
-    const allTable = getRepository(User)
-    const userInfo = await allTable.findOne({ where: { email: target } })
+
+  getUserInfo: async (target: string) => {
+    const userEntity = getRepository(User)
+    const userInfo = await userEntity.findOne({ where: { email: target } })
     if (typeof userInfo === 'undefined') {
       throw new Error('잘못된 회원 정보입니다.')
     } else {
@@ -78,4 +79,44 @@ export default {
       }
     }
   },
+
+  createUser: async (email: string, userName: string, password: string) => {
+    const user: User = new User()
+    user.email = email
+    user.userName = userName
+    user.password = password
+    await getRepository(User).save(user)
+    return user
+  },
+
+  createOauthUser: async (email: number, userName: string, password: string) => {
+    const user: User = new User()
+    const changeEmailType = `'${email}'`
+    user.email = changeEmailType
+    user.userName = userName
+    user.password = password
+    await getRepository(User).save(user)
+    return user
+  },
+
+  getKakaoUserInfo: async (target: string) => {
+    const userEntity = getRepository(User)
+    const userInfo = await userEntity.findOne({ where: { email: target } })
+    if (typeof userInfo === 'undefined') {
+      return undefined
+    } else {
+      return userInfo
+    }
+  },
+  getProduct: async () => {
+    await getConnection().createQueryBuilder()
+    // .where("item.name = :item", { name: "Timber" })
+  },
+
+  //   generate accessToken
+  //   const accessToken = token.generateAccessToken(
+  //     checkUser[0].id,
+  //     checkUser[0].email,
+  //     checkUser[0].userName
+  //   )
 }
