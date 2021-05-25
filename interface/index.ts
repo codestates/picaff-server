@@ -108,11 +108,9 @@ export default {
       return userInfo
     }
   },
-  // getProduct: async () => {
-  //   await connection.getRepository(Item).createQueryBuilder('item').where('item.id =:id', { id: 1 })
-  //     .get
-  //   await getConnection().createQueryBuilder().where('item.name = :item', { name: 'Timber' })
-  // },
+  getProduct: async (itemId: number) => {
+    await getConnection().createQueryBuilder().where('item.id = :id', { name: itemId })
+  },
 
   // const result = await getConnection()
   //   .createQueryBuilder('user')
