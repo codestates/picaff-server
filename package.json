@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/codestates/im27project15-server-#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",

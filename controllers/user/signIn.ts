@@ -10,7 +10,7 @@ const signIn = async (req: Request, res: Response) => {
     return res.status(403).send({ message: '아이디와 비밀번호를 확인해주세요.' })
   }
   try {
-    const userInfo = await interfaces.pickUserInfo(req.body.email)
+    const userInfo = await interfaces.getUserInfo(req.body.email)
     const { id, email, userName } = userInfo
     if (userInfo.password === req.body.password) {
       const accessToken = token.generateAccessToken(id, email, userName)

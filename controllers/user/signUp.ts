@@ -17,7 +17,7 @@ const signUp = async (req: Request, res: Response) => {
         user.email = req.body.email
         user.password = req.body.password
         await getRepository(User).save(user)
-        const userInfo = await interfaces.pickUserInfo(user.email)
+        const userInfo = await interfaces.getUserInfo(user.email)
         const { id, email, userName } = userInfo
         res.status(201).send({
           id: id,
