@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import corsOption from '@middleware/cors'
 import cors from 'cors'
-import { userRouter } from '../router/index'
+import { userRouter, itemRouter, testRouter } from '../router/index'
 import { createConnection, Connection } from 'typeorm'
 import 'dotenv'
 
@@ -31,5 +31,7 @@ app.get('/', (req: Request, res: Response) => {
 
 //router setup
 app.use('/user', userRouter)
+app.use('/item', itemRouter)
+app.use('/test', testRouter)
 
 export default app
