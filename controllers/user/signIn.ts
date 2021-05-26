@@ -19,13 +19,11 @@ const signIn = async (req: Request, res: Response) => {
         .status(200)
         .cookie('refreshToken', refreshToken, { httpOnly: true })
         .send({
-          data: {
-            id: id,
-            userName: userName,
-            email: email,
-            auth: {
-              accessToken: accessToken,
-            },
+          id: id,
+          userName: userName,
+          email: email,
+          auth: {
+            accessToken: accessToken,
           },
         })
     } else {

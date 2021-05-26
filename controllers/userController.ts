@@ -8,7 +8,8 @@ import {
   signOff,
   modification,
   addTest,
-  // userInfo,
+  userInfo,
+  getAccessToken,
 } from './user/userHandler'
 
 export default {
@@ -21,5 +22,6 @@ export default {
   signOff,
   modification,
   addTest,
-  // userInfo,
+  userInfo,
+  getAccessToken,
 }
