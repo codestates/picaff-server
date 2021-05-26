@@ -20,7 +20,7 @@ export default class TestResult {
   @JoinColumn({ name: "userId" })
   user!: User;
   @Column({ default: null })
-  userId!: number;
+  userId!: number | null;
 
   @ManyToOne(() => Item, (item) => item.itemResults, {
     nullable: false, // migration시 nullable True로 생성됨.
