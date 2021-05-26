@@ -1,6 +1,7 @@
 import nodemail from 'nodemailer'
 import dotenv from 'dotenv'
 import { Response, Request } from 'express'
+import { default as interfaces } from '@interface/index'
 
 dotenv.config()
 const makeSerial = (): string => {
@@ -13,6 +14,9 @@ const makeSerial = (): string => {
 
 const mail = async (req: Request, res: Response) => {
   const { email } = req.body
+  const isExistEmail = await interfaces.isCheckUser(email);
+  if(isExistEmail) return res.status(401).send({ message: '이미 사용중인 메일주소입니다.'});
+
   //이미 존재하는 메일 여부 체크 유저정보에서 확인해서 예외처리
   const serialnum = makeSerial()
   let transporter = nodemail.createTransport({
@@ -54,7 +58,7 @@ const mail = async (req: Request, res: Response) => {
     ],
   })
 
-  res.status(201).send({ serialnum })
+  return res.status(201).send({ serialnum });
 }
 
 export default mail
