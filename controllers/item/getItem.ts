@@ -18,7 +18,6 @@ const getItem = async (req: Request, res: Response) => {
         const {
           coffeeCharacterId,
           productCharacterId,
-          categoryId,
           id,
           itemName,
           itemPrice,
@@ -40,7 +39,6 @@ const getItem = async (req: Request, res: Response) => {
             type: type,
             imageUrl: imageUrl,
             iso: iso,
-            categoryId: categoryId,
             character: {
               id: coffeeCharacter.id,
               sweetness: sweetness,
@@ -60,7 +58,6 @@ const getItem = async (req: Request, res: Response) => {
             itemPrice: itemPrice,
             type: type,
             imageUrl: imageUrl,
-            categoryId: categoryId,
             character: {
               id: productCharacter.id,
               accessibility: accessibility,

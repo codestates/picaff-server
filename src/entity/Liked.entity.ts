@@ -4,30 +4,35 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import Item from "./Item.entity";
-import User from "./User.entity";
+  BaseEntity,
+  Unique,
+} from 'typeorm'
+import Item from './Item.entity'
+import User from './User.entity'
 
 @Entity()
 export default class Liked {
+  @Unique(['userId', 'itemId'])
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
 
   @ManyToOne(() => User, (user) => user.likeds, {
     nullable: true,
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
+    primary: true,
   })
-  @JoinColumn({ name: "userId" })
-  user!: User;
+  @JoinColumn({ name: 'userId' })
+  user!: User
   @Column({ default: null })
-  userId!: number;
+  userId!: number
 
   @ManyToOne(() => Item, (item) => item.likeds, {
-    nullable: false,
-    onDelete: "CASCADE",
+    nullable: true,
+    onDelete: 'CASCADE',
+    primary: true,
   })
-  @JoinColumn({ name: "itemId" })
-  item!: Item;
+  @JoinColumn({ name: 'itemId' })
+  item!: Item
   @Column({ default: null })
-  itemId!: number;
+  itemId!: number
 }

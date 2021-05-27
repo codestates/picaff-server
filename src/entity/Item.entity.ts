@@ -8,7 +8,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import Category from './Category.entity'
 import ProductCharacter from './ProductCharacter.entity'
 import CoffeeCharacter from './CoffeeCharacter.entity'
 import Liked from './Liked.entity'
@@ -33,7 +32,7 @@ export default class Item {
   @Column()
   type!: string
 
-  @Column()
+  @Column({ default: null })
   imageUrl!: string
 
   @Column({ default: null })
@@ -49,15 +48,6 @@ export default class Item {
 
   @OneToMany(() => TagItem, (tagItem) => tagItem.item)
   tagItems!: TagItem[]
-
-  @ManyToOne(() => Category, (category) => category.items, {
-    nullable: false, // migration시 nullable True로 생성됨.
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'categoryId' })
-  category!: Category
-  @Column({ default: null })
-  categoryId!: number
 
   @ManyToOne(() => ProductCharacter, (productCharacter) => productCharacter.items, {
     nullable: true,
@@ -76,8 +66,4 @@ export default class Item {
   coffeeCharacter!: CoffeeCharacter
   @Column({ default: null })
   coffeeCharacterId!: number
-
-  // @ManyToMany(() => Tag)
-  // @JoinTable()
-  // tags!: Tag[]
 }

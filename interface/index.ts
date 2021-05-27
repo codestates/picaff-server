@@ -1,14 +1,11 @@
-import { getRepository, getConnection, createQueryBuilder } from 'typeorm'
+import { getRepository, getConnection } from 'typeorm'
 import User from '@entity/User.entity'
 import Item from '@entity/Item.entity'
-import Liked from '@entity/Liked.entity'
-import Category from '@entity/Category.entity'
 import ProductCharacter from '@entity/ProductCharacter.entity'
 import CoffeeCharacter from '@entity/CoffeeCharacter.entity'
 import TestResult from '@entity/TestResult.entity'
 import { tokenUser } from './type'
 import TagItem from '@entity/TagItem.entity'
-import Tag from '@entity/Tag.entity'
 
 export default {
   isCheckUser: async (target: string) => {
@@ -139,18 +136,6 @@ export default {
   },
 
   getTagAndItemInfo: async (tagId: number, type: string) => {
-    // const tagInfo = await getRepository(TagItem)
-    //   .createQueryBuilder('tagItem')
-    //   .leftJoinAndSelect('tag.tagItems', 'tagItem', 'tag.tagId = :tagId', { tagId: target })
-    //   // .leftJoinAndSelect('item.tagItems', 'tagItem', 'tagItem.itemId')
-    //   .getMany()
-    // const tagInfo = await getRepository(Item)
-    //   .createQueryBuilder('item')
-    //   .leftJoinAndSelect('item.tagItems', 'tagItem')
-    //   .where('tag.id = :id', { id: tagId })
-    //   .leftJoinAndSelect('tagItem.tag,', 'tag')
-    //   .andWhere('item.type =: type', { type: type })
-    //   .getMany()
     const tagAndItemInfo = await getRepository(TagItem)
       .createQueryBuilder('tagItem')
       .leftJoinAndSelect('tagItem.tag', 'tag')
@@ -186,40 +171,9 @@ export default {
     return productCharacter
   },
 
-  getCategoryName: async (categoryId: number) => {
-    const categoryNames = await getRepository(Category).findOne({ where: { id: categoryId } })
-    return categoryNames
-  },
-
   getAllItemInfo: async (target: string) => {
     const allItemInfo = await getRepository(Item).find({ where: { type: target } })
     console.log(allItemInfo)
     return allItemInfo
   },
-
-  // getItemInfo: async (itemId: number) => {
-  //   const itemInfo = await getRepository(TagItem)
-  //     .createQueryBuilder('tagItem')
-  //     .innerJoinAndSelect('tagItem.item', 'item', 'item.itemId = :itemId', { itemId: itemId })
-  //     .innerJoinAndSelect('tagItem.tag', 'tag', 'tag.Id = :itemId', {
-  //     //   itemId: itemId,
-  //     // })
-  //     .leftJoinAndSelect('item.tag', 'tag')
-  //     .getOne()
-  //   return itemInfo
-  // },
-
-  // getTagName: async (itemId: number) => {
-  //   const tagName = await getRepository(TagItem)
-  //     .createQueryBuilder('tagItem')
-  //     .innerJoinAndSelect('tagItem.tags', 'tagItem', 'liked.itemId = :itemId', { itemId: itemId })
-  // },
-  // getCategoryInfo: async (getCategory)
-
-  // const result = await getConnection()
-  //   .createQueryBuilder('user')
-  //   .leftJoinAndSelect('user.linkedSheep', 'linkedSheep')
-  //   .leftJoinAndSelect('user.linkedCow', 'linkedCow')
-  //   .where('user.linkedSheep = :sheepId', { sheepId })
-  //   .andWhere('user.linkedCow = :cowId', { cowId });
 }

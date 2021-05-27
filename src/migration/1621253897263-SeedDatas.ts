@@ -16,7 +16,6 @@ export class SeedDatas1621253897263 implements MigrationInterface {
   //   const queryRunner = connection.createQueryRunner(); DB셋업 마이그레이션쪽으로 빼는시도중
   public async up(queryRunner: QueryRunner): Promise<void> {
     await getRepository('User').save(UserDataSeed)
-    await getRepository('Category').save(CategoryDataSeed)
     await getRepository('CoffeeCharacter').save(CoffeeCharacterDataSeed)
     await getRepository('ProductCharacter').save(ProductCharacterDataSeed)
     await getRepository('Tag').save(TagDataSeed)

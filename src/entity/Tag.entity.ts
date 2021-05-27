@@ -12,9 +12,4 @@ export default class Tag {
 
   @OneToMany(() => TagItem, (tagItem) => tagItem.tag)
   tagItems!: TagItem[]
-
-  // @ManyToMany(() => Item)
-  // @JoinTable({ name: 'tag_item' })
-  // items!: Item[]
-  // @Column({name: 'id'})
 }
