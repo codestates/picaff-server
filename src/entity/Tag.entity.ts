@@ -1,14 +1,20 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import TagItem from "./TagItem.entity";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import TagItem from './TagItem.entity'
+import Item from './Item.entity'
 
 @Entity()
 export default class Tag {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
 
   @Column()
-  tagName!: string;
+  tagName!: string
 
   @OneToMany(() => TagItem, (tagItem) => tagItem.tag)
-  tagItems!: TagItem[];
+  tagItems!: TagItem[]
+
+  // @ManyToMany(() => Item)
+  // @JoinTable({ name: 'tag_item' })
+  // items!: Item[]
+  // @Column({name: 'id'})
 }

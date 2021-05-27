@@ -1,18 +1,18 @@
 export const TagItemDataSeed = [
   {
     tagId: 1,
-    itemId: 2,
-  },
-  {
-    tagId: 1,
-    itemId: 2,
+    itemId: 1,
   },
   {
     tagId: 2,
+    itemId: 1,
+  },
+  {
+    tagId: 3,
     itemId: 3,
   },
   {
     tagId: 2,
-    itemId: 4,
+    itemId: 2,
   },
-];
+]

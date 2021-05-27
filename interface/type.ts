@@ -24,3 +24,7 @@ export type googleClientId = {
 export type kakaoProperties = {
   nickname: string
 }
+
+export type queryItemId = {
+  id: number
+}

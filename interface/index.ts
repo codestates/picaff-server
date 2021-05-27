@@ -1,7 +1,14 @@
-import { getRepository, getConnection } from 'typeorm'
+import { getRepository, getConnection, createQueryBuilder } from 'typeorm'
 import User from '@entity/User.entity'
+import Item from '@entity/Item.entity'
+import Liked from '@entity/Liked.entity'
+import Category from '@entity/Category.entity'
+import ProductCharacter from '@entity/ProductCharacter.entity'
+import CoffeeCharacter from '@entity/CoffeeCharacter.entity'
 import TestResult from '@entity/TestResult.entity'
 import { tokenUser } from './type'
+import TagItem from '@entity/TagItem.entity'
+import Tag from '@entity/Tag.entity'
 
 export default {
   isCheckUser: async (target: string) => {
@@ -108,9 +115,106 @@ export default {
       return userInfo
     }
   },
-  getProduct: async (itemId: number) => {
-    await getConnection().createQueryBuilder().where('item.id = :id', { name: itemId })
+
+  getGoogleUserInfo: async (target: string) => {
+    const userEntity = getRepository(User)
+    const userInfo = await userEntity.findOne({ where: { email: target } })
+    if (typeof userInfo === 'undefined') {
+      return undefined
+    } else {
+      return userInfo
+    }
   },
+
+  getItemInfoWithLiked: async (itemId: number) => {
+    const itemInfo = await getRepository(Item)
+      .createQueryBuilder('item')
+      .leftJoinAndSelect('item.likeds', 'liked', 'liked.itemId = :itemId', { itemId: itemId })
+      .leftJoinAndSelect('item.tagItems', 'tagItem', 'tagItem.itemId = :itemId', {
+        itemId: itemId,
+      })
+      .getOne()
+    console.log(itemInfo)
+    return itemInfo
+  },
+
+  getTagAndItemInfo: async (tagId: number, type: string) => {
+    // const tagInfo = await getRepository(TagItem)
+    //   .createQueryBuilder('tagItem')
+    //   .leftJoinAndSelect('tag.tagItems', 'tagItem', 'tag.tagId = :tagId', { tagId: target })
+    //   // .leftJoinAndSelect('item.tagItems', 'tagItem', 'tagItem.itemId')
+    //   .getMany()
+    // const tagInfo = await getRepository(Item)
+    //   .createQueryBuilder('item')
+    //   .leftJoinAndSelect('item.tagItems', 'tagItem')
+    //   .where('tag.id = :id', { id: tagId })
+    //   .leftJoinAndSelect('tagItem.tag,', 'tag')
+    //   .andWhere('item.type =: type', { type: type })
+    //   .getMany()
+    const tagAndItemInfo = await getRepository(TagItem)
+      .createQueryBuilder('tagItem')
+      .leftJoinAndSelect('tagItem.tag', 'tag')
+      .leftJoinAndSelect('tagItem.item', 'item')
+      .where('tag.id = :id', { id: tagId })
+      .andWhere('item.type = :type', { type: type })
+      .getMany()
+
+    console.log(tagAndItemInfo)
+    return tagAndItemInfo
+  },
+
+  // 되는코드
+  // const tagInfo = await getRepository(TagItem)
+  // .createQueryBuilder('tagItem')
+  // .leftJoinAndSelect('tagItem.tag', 'tag')
+  // .where('tag.id = :id', { id: tagId })
+  // .leftJoinAndSelect('item.type', 'type')
+  // .andWhere('item.type = :type', { type: type })
+  // .getMany()
+
+  getCoffeeCharacter: async (coffeeCharacterId: number) => {
+    const coffeeCharacter = await getRepository(CoffeeCharacter).findOne({
+      where: { id: coffeeCharacterId },
+    })
+    return coffeeCharacter
+  },
+
+  getProductCharacter: async (productCharacterId: number) => {
+    const productCharacter = await getRepository(ProductCharacter).findOne({
+      where: { id: productCharacterId },
+    })
+    return productCharacter
+  },
+
+  getCategoryName: async (categoryId: number) => {
+    const categoryNames = await getRepository(Category).findOne({ where: { id: categoryId } })
+    return categoryNames
+  },
+
+  getAllItemInfo: async (target: string) => {
+    const allItemInfo = await getRepository(Item).find({ where: { type: target } })
+    console.log(allItemInfo)
+    return allItemInfo
+  },
+
+  // getItemInfo: async (itemId: number) => {
+  //   const itemInfo = await getRepository(TagItem)
+  //     .createQueryBuilder('tagItem')
+  //     .innerJoinAndSelect('tagItem.item', 'item', 'item.itemId = :itemId', { itemId: itemId })
+  //     .innerJoinAndSelect('tagItem.tag', 'tag', 'tag.Id = :itemId', {
+  //     //   itemId: itemId,
+  //     // })
+  //     .leftJoinAndSelect('item.tag', 'tag')
+  //     .getOne()
+  //   return itemInfo
+  // },
+
+  // getTagName: async (itemId: number) => {
+  //   const tagName = await getRepository(TagItem)
+  //     .createQueryBuilder('tagItem')
+  //     .innerJoinAndSelect('tagItem.tags', 'tagItem', 'liked.itemId = :itemId', { itemId: itemId })
+  // },
+  // getCategoryInfo: async (getCategory)
 
   // const result = await getConnection()
   //   .createQueryBuilder('user')

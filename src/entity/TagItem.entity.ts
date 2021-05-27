@@ -1,33 +1,27 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import Item from "./Item.entity";
-import Tag from "./Tag.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import Item from './Item.entity'
+import Tag from './Tag.entity'
 
 @Entity()
 export default class TagItem {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
 
   @ManyToOne(() => Tag, (tag) => tag.tagItems, {
     nullable: false, // migration시 nullable True로 생성됨.
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: "tagId" })
-  tag!: Tag;
+  @JoinColumn({ name: 'tagId' })
+  tag!: Tag
   @Column({ default: null })
-  tagId!: number;
+  tagId!: number
 
   @ManyToOne(() => Item, (item) => item.tagItems, {
     nullable: false, // migration시 nullable True로 생성됨.
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: "itemId" })
-  item!: Item;
+  @JoinColumn({ name: 'itemId' })
+  item!: Item
   @Column({ default: null })
-  itemId!: number;
+  itemId!: number
 }

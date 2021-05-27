@@ -8,6 +8,7 @@ import { LikedDataSeed } from '../seeds/liked.seed'
 import { TagDataSeed } from '../seeds/tag.seed'
 import { TagItemDataSeed } from '../seeds/tagItem.seed'
 import { TestResultDataSeed } from '../seeds/testResult.seed'
+import { SharedDataSeed } from '../seeds/shared.seed'
 import { query } from 'express'
 
 export class SeedDatas1621253897263 implements MigrationInterface {
@@ -23,6 +24,7 @@ export class SeedDatas1621253897263 implements MigrationInterface {
     await getRepository('Liked').save(LikedDataSeed)
     await getRepository('TagItem').save(TagItemDataSeed)
     await getRepository('TestResult').save(TestResultDataSeed)
+    await getRepository('Shared').save(SharedDataSeed)
     await query
   }
 

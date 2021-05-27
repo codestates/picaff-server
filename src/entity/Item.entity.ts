@@ -1,10 +1,20 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 import Category from './Category.entity'
 import ProductCharacter from './ProductCharacter.entity'
 import CoffeeCharacter from './CoffeeCharacter.entity'
 import Liked from './Liked.entity'
 import TagItem from './TagItem.entity'
 import TestResult from './TestResult.entity'
+import Tag from './Tag.entity'
 
 @Entity()
 export default class Item {
@@ -22,6 +32,12 @@ export default class Item {
 
   @Column()
   type!: string
+
+  @Column()
+  imageUrl!: string
+
+  @Column({ default: null })
+  iso!: string
 
   @OneToMany(() => TestResult, (testResult) => testResult.itemType)
   itemResults!: TestResult[]
@@ -60,4 +76,8 @@ export default class Item {
   coffeeCharacter!: CoffeeCharacter
   @Column({ default: null })
   coffeeCharacterId!: number
+
+  // @ManyToMany(() => Tag)
+  // @JoinTable()
+  // tags!: Tag[]
 }
