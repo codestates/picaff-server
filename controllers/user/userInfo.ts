@@ -1,6 +1,7 @@
 import token from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
+import { coffeeItemInfo, productItemInfo } from '@interface/type'
 
 const userInfo = async (req: Request, res: Response) => {
   if (!req.headers.authorization) {
@@ -14,8 +15,8 @@ const userInfo = async (req: Request, res: Response) => {
       const likedCoffeeList = await interfaces.getLiked(verifyToken.id, 'coffee')
       const likedProductList = await interfaces.getLiked(verifyToken.id, 'machine')
       if (typeof testInfo !== 'string') {
-        const coffeeInfo = await interfaces.getItemInfo(testInfo.coffeeTypeId)
-        const productInfo = await interfaces.getItemInfo(testInfo.itemTypeId)
+        const coffeeInfo = await interfaces.getItemInfo(testInfo.coffeeTypeId, userInfo.id)
+        const productInfo = await interfaces.getItemInfo(testInfo.itemTypeId, userInfo.id)
         if (typeof coffeeInfo === 'undefined' || typeof productInfo === 'undefined') {
           return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
         }
