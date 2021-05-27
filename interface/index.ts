@@ -8,7 +8,7 @@ import { tokenUser } from './type'
 import TagItem from '@entity/TagItem.entity'
 
 export default {
-  checkUser: async (target: string) => {
+  isCheckUser: async (target: string) => {
     const allTable = getRepository(User)
     const userInfo = await allTable.findOne({ where: { email: target } })
     if (typeof userInfo === 'undefined') {
@@ -17,6 +17,7 @@ export default {
       return true
     }
   },
+
   getUserInfo: async (target: string) => {
     const userEntity = getRepository(User)
     const userInfo = await userEntity.findOne({ where: { email: target } })
@@ -60,9 +61,9 @@ export default {
     testId: number | null,
     isNull: boolean
   ) => {
-    const estResultEntity = getRepository(TestResult)
+    const testResultEntity = getRepository(TestResult)
     if (isNull) {
-      const testInfo = await estResultEntity.findOne({ where: { id: testId } })
+      const testInfo = await testResultEntity.findOne({ where: { id: testId } })
       if (typeof testInfo === 'undefined') {
         const err: string = '회원 정보와 설문조사 자료가 일치하지 않습니다.'
         return err
@@ -74,7 +75,7 @@ export default {
             .set({ userId: userId })
             .where({ id: testId })
             .execute()
-          const resultInfo = await estResultEntity.findOne({ where: { id: testId } })
+          const resultInfo = await testResultEntity.findOne({ where: { id: testId } })
           if (typeof resultInfo !== 'undefined') {
             return resultInfo
           } else {
@@ -87,7 +88,7 @@ export default {
         }
       }
     } else {
-      const testInfo = await estResultEntity.findOne({ where: { userId: userId } })
+      const testInfo = await testResultEntity.findOne({ where: { userId: userId } })
       if (typeof testInfo === 'undefined') {
         throw new Error('회원 정보와 설문조사 자료가 일치하지 않습니다.')
       } else {
@@ -95,14 +96,16 @@ export default {
       }
     }
   },
+
   createUser: async (email: string, userName: string, password: string) => {
-    const user: User = await new User()
+    const user: User = new User()
     user.email = email
     user.userName = userName
     user.password = password
     await getRepository(User).save(user)
     return user
   },
+
   createOauthUser: async (email: number, userName: string, password: string) => {
     const user: User = new User()
     const changeEmailType = `'${email}'`
@@ -112,6 +115,7 @@ export default {
     await getRepository(User).save(user)
     return user
   },
+
   getKakaoUserInfo: async (target: string) => {
     const userEntity = getRepository(User)
     const userInfo = await userEntity.findOne({ where: { email: target } })
@@ -157,6 +161,15 @@ export default {
     return tagAndItemInfo
   },
 
+  // 되는코드
+  // const tagInfo = await getRepository(TagItem)
+  // .createQueryBuilder('tagItem')
+  // .leftJoinAndSelect('tagItem.tag', 'tag')
+  // .where('tag.id = :id', { id: tagId })
+  // .leftJoinAndSelect('item.type', 'type')
+  // .andWhere('item.type = :type', { type: type })
+  // .getMany()
+
   getCoffeeCharacter: async (coffeeCharacterId: number) => {
     const coffeeCharacter = await getRepository(CoffeeCharacter).findOne({
       where: { id: coffeeCharacterId },
@@ -175,56 +188,5 @@ export default {
     const allItemInfo = await getRepository(Item).find({ where: { type: target } })
     console.log(allItemInfo)
     return allItemInfo
-  },
-
-  getProduct: async () => {
-    await getConnection().createQueryBuilder()
-  },
-  getItemInfo: async (itemId: number) => {
-    try {
-      const itemEntity = await getRepository(Item).findOne({ where: { id: itemId } })
-      if (typeof itemId === 'undefined') {
-        throw new Error('정확한 정보를 입력해 주세요')
-      } else {
-        if (itemEntity!.type === 'coffee') {
-          const itemInfo = await getRepository(Item)
-            .createQueryBuilder('item')
-            .leftJoinAndSelect('item.coffeeCharacter', 'coffeeCharacter')
-            .where('item.id = :id', { id: itemId })
-            .getOne()
-          return itemInfo
-        } else if (itemEntity!.type === 'machine') {
-          const itemInfo = await getRepository(Item)
-            .createQueryBuilder('item')
-            .leftJoinAndSelect('item.productCharacter', 'productCharacter')
-            .where('item.id = :id', { id: itemId })
-            .getOne()
-          return itemInfo
-        }
-      }
-    } catch {
-      throw new Error('정확한 정보를 입력해 주세요')
-    }
-  },
-  getLiked: async (userId: number, type: string) => {
-    if (type === 'coffee') {
-      const likedItemList = await getRepository(Item)
-        .createQueryBuilder('item')
-        .leftJoin('item.likeds', 'liked')
-        .where('item.type = :type', { type: type })
-        .andWhere('liked.Userid = :userId', { userId: userId })
-        .leftJoinAndSelect('item.coffeeCharacter', 'coffeeCharacter')
-        .getMany()
-      return likedItemList
-    } else {
-      const likedItemList = await getRepository(Item)
-        .createQueryBuilder('item')
-        .leftJoin('item.likeds', 'liked')
-        .leftJoinAndSelect('item.productCharacter', 'productCharacter')
-        .where('item.type = :type', { type: type })
-        .andWhere('liked.Userid = :userId', { userId: userId })
-        .getMany()
-      return likedItemList
-    }
   },
 }

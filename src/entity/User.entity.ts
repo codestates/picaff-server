@@ -32,6 +32,6 @@ export default class User {
   @OneToMany(() => TestResult, (testResult) => testResult.user)
   testResults!: TestResult[]
 
-  @OneToMany(() => Liked, (liked) => liked.user)
+  @OneToMany(() => Liked, (liked) => liked.user, { cascade: true })
   likeds!: Liked[]
 }

@@ -46,7 +46,7 @@ export default class Item {
   @OneToMany(() => Liked, (liked) => liked.item)
   likeds!: Liked[]
 
-  @OneToMany(() => TagItem, (tagItem) => tagItem.item)
+  @OneToMany(() => TagItem, (tagItem) => tagItem.item, { cascade: true })
   tagItems!: TagItem[]
 
   @ManyToOne(() => ProductCharacter, (productCharacter) => productCharacter.items, {
