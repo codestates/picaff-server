@@ -11,7 +11,8 @@ router.post('/signout', userController.signOut)
 router.delete('/signoff', userController.signOff)
 router.patch('/', userController.modification)
 router.patch('/test', userController.addTest)
-// router.get('/', userController.userInfo);
+router.get('/', userController.userInfo)
 router.post('/email', userController.mail)
+router.get('/token', userController.getAccessToken)
 
 export default router

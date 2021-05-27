@@ -1,6 +1,4 @@
-import User from '@entity/User.entity'
 import { Response, Request } from 'express'
-import { getRepository } from 'typeorm'
 import { default as interfaces } from '@interface/index'
 
 const signUp = async (req: Request, res: Response) => {
@@ -12,11 +10,7 @@ const signUp = async (req: Request, res: Response) => {
       if (req.body.email === '' || req.body.email === null) {
         return res.status(404).send({ message: '정확한 정보를 입력해 주십시오.' })
       } else {
-        const user: User = new User()
-        user.userName = req.body.userName
-        user.email = req.body.email
-        user.password = req.body.password
-        await getRepository(User).save(user)
+        const user = await interfaces.createUser(req.body.email, req.body.userName, req.body.password);
         const userInfo = await interfaces.getUserInfo(user.email)
         const { id, email, userName } = userInfo
         res.status(201).send({
