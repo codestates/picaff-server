@@ -40,9 +40,8 @@ export interface TestResult {
   itemName: string
   itemPrice: number
   itemDetail: string
-  type: 'machine' | 'coffee'
+  type: 'product' | 'coffee'
   imageUrl: string
-  categoryId: number
   iso?: string
   itemCharacter?: ProductCharacter
   coffeCharactre?: CoffeeCharacter
@@ -111,13 +110,35 @@ export type tokenUser = {
   iat: number
   exp: number
 }
-
 export type googleClientId = {
   GOOGLE_CLIENT_ID: string
 }
-
 export type kakaoProperties = {
   nickname: string
+}
+export type coffeeItemInfo = {
+  id: number
+  itemName: string
+  itemPrice: number
+  itemDetail: string
+  type: string
+  productCharacterId: number | null
+  coffeeCharacterId: number | null
+  coffeeCharacter: object
+  tag: object
+  isLiked: boolean
+}
+export type productItemInfo = {
+  id: number
+  itemName: string
+  itemPrice: number
+  itemDetail: string
+  type: string
+  productCharacterId: number | null
+  coffeeCharacterId: number | null
+  productCharacter: object
+  tag: object
+  isLiked: boolean
 }
 
 export type queryItemId = {
