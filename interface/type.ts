@@ -28,11 +28,11 @@ export type coffeeItemInfo = {
   itemPrice: number
   itemDetail: string
   type: string
-  categoryId: number
+  iso: string | null
   productCharacterId: number | null
   coffeeCharacterId: number | null
   coffeeCharacter: object
-  tag: object
+  tag: Array<tag>
   isLiked: boolean;
 }
 export type productItemInfo = {
@@ -41,10 +41,15 @@ export type productItemInfo = {
   itemPrice: number
   itemDetail: string
   type: string
-  categoryId: number
+  iso: string | null
   productCharacterId: number | null
   coffeeCharacterId: number | null
   productCharacter: object
-  tag: object
+  tag: Array<tag>
   isLiked: boolean;
+}
+
+export type tag = {
+  id: number
+  tagName: string
 }
