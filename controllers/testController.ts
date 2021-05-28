@@ -1,4 +1,4 @@
-import token from '@middleware/jwt'
+import { default as jwt } from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
 import { default as test } from '@interface/test'
@@ -25,7 +25,7 @@ export default {
       return res.status(200).send({ testResultInfo, coffeeResult, productResult })
     } else {
       const accessToken = req.headers.authorization.split(' ')[1]
-      const verifyToken = token.verifyToken(accessToken)
+      const verifyToken = jwt.verifyToken(accessToken)
       const userInfo = await interfaces.getUserInfo(verifyToken.email)
       if (verifyToken.id !== userInfo.id) {
         return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })

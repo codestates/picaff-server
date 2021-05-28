@@ -16,7 +16,7 @@ const addTest = async (req: Request, res: Response) => {
         true
       )
       if (typeof testInfo === 'object') {
-        return res.status(202).send(testInfo)
+        return res.status(202).send(testInfo[0])
       } else {
         return res.status(404).send({ message: testInfo })
       }
