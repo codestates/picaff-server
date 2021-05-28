@@ -1,11 +1,7 @@
 import express, { Request, Response } from 'express'
 import corsOption from '@middleware/cors'
 import cors from 'cors'
-<<<<<<< HEAD
-import { userRouter, itemRouter } from '../router/index'
-=======
 import { userRouter, itemRouter, testRouter } from '../router/index'
->>>>>>> 737c6dd4facf00e9fad9aae26a37102ca8a2d2df
 import { createConnection, Connection } from 'typeorm'
 import 'dotenv'
 
@@ -34,13 +30,8 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 //router setup
-<<<<<<< HEAD
-app.use('/user', userRouter) // user/signup
-app.use('/item', itemRouter)
-=======
 app.use('/user', userRouter)
 app.use('/item', itemRouter)
 app.use('/test', testRouter)
->>>>>>> 737c6dd4facf00e9fad9aae26a37102ca8a2d2df
 
 export default app

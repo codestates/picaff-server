@@ -19,7 +19,7 @@ export default class Liked {
   @ManyToOne(() => User, (user) => user.likeds, {
     nullable: true,
     onDelete: 'CASCADE',
-    primary: true,
+    // primary: true,
   })
   @JoinColumn({ name: 'userId' })
   user!: User
@@ -29,7 +29,7 @@ export default class Liked {
   @ManyToOne(() => Item, (item) => item.likeds, {
     nullable: true,
     onDelete: 'CASCADE',
-    primary: true,
+    // primary: true,
   })
   @JoinColumn({ name: 'itemId' })
   item!: Item

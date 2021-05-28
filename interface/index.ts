@@ -9,9 +9,9 @@ import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
 import Liked from '@entity/Liked.entity'
 
 export default {
-  isCheckUser: async (target: string) => {
-    const allTable = getRepository(User)
-    const userInfo = await allTable.findOne({ where: { email: target } })
+  checkUser: async (target: string) => {
+    const userEntity = getRepository(User)
+    const userInfo = await userEntity.findOne({ where: { email: target } })
     if (typeof userInfo === 'undefined') {
       return false
     } else {
@@ -28,6 +28,7 @@ export default {
       return userInfo
     }
   },
+
   editUserInfo: async (target: string, editInfo: string, id: number) => {
     try {
       if (target === 'userName') {
@@ -45,8 +46,8 @@ export default {
           .where({ id: id })
           .execute()
       }
-      const allTable = getRepository(User)
-      const userInfo = await allTable.findOne({ where: { id: id } })
+      const userEntity = getRepository(User)
+      const userInfo = await userEntity.findOne({ where: { id: id } })
       if (typeof userInfo === 'undefined') {
         throw Error('잘못된 회원 정보입니다.')
       } else {
@@ -56,6 +57,7 @@ export default {
       throw new Error('다시 시도하세요.')
     }
   },
+
   getTestResultInfo: async (
     userId: number,
     token: tokenUser,
@@ -137,17 +139,13 @@ export default {
     }
   },
 
-  getProduct: async () => {
-    await getConnection().createQueryBuilder()
-  },
-
   getItemInfo: async (itemId: number, userId: number | null) => {
     try {
-      const itemEntity = await getRepository(Item).findOne({ where: { id: itemId } })
+      const targetItem = await getRepository(Item).findOne({ where: { id: itemId } })
       if (typeof itemId === 'undefined') {
         throw new Error('정확한 정보를 입력해 주세요')
       } else {
-        if (itemEntity!.type === 'coffee') {
+        if (targetItem!.type === 'coffee') {
           const itemInfo = await getRepository(Item)
             .createQueryBuilder('item')
             .leftJoinAndSelect('item.coffeeCharacter', 'coffeeCharacter')
@@ -155,19 +153,22 @@ export default {
             .leftJoinAndSelect('tagItem.tag', 'tag')
             .where('item.id = :id', { id: itemId })
             .getOne()
-          let isCheckLiked: boolean
+          let isLiked: boolean
           if (userId === null) {
-            isCheckLiked = false
+            isLiked = false
           } else {
-            const isCheckedLiked = await getRepository(Liked)
+            console.log('////////////////itemId ', itemId)
+            console.log('@@@@@@@@@@@@@2userId: ', userId)
+            const checkIsLiked = await getRepository(Liked)
               .createQueryBuilder('liked')
               .where('liked.userId = :userId', { userId: userId })
               .andWhere('liked.itemId = :itemId', { itemId: itemId })
               .getOne()
-            if (typeof isCheckedLiked === 'undefined') {
-              isCheckLiked = false
+            console.log('checkIsLiked!!!@!!//', checkIsLiked)
+            if (typeof checkIsLiked === 'undefined') {
+              isLiked = false
             } else {
-              isCheckLiked = true
+              isLiked = true
             }
           }
           if (typeof itemInfo !== 'undefined') {
@@ -194,13 +195,14 @@ export default {
               tag: tagItems.map((data) => {
                 return data.tag
               }),
-              isLiked: isCheckLiked,
+              isLiked: isLiked,
             }
+            console.log(resultItemInfo)
             return resultItemInfo
           } else {
             throw new Error('정확한 정보를 입력해 주세요')
           }
-        } else if (itemEntity!.type === 'product') {
+        } else if (targetItem!.type === 'product') {
           const itemInfo = await getRepository(Item)
             .createQueryBuilder('item')
             .leftJoinAndSelect('item.productCharacter', 'productCharacter')
@@ -208,19 +210,19 @@ export default {
             .leftJoinAndSelect('tagItem.tag', 'tag')
             .where('item.id = :id', { id: itemId })
             .getOne()
-          let isCheckLiked: boolean
+          let isLiked: boolean
           if (userId === null) {
-            isCheckLiked = false
+            isLiked = false
           } else {
-            const isCheckedLiked = await getRepository(Liked)
+            const checkIsLiked = await getRepository(Liked)
               .createQueryBuilder('liked')
               .where('liked.userId = :userId', { userId: userId })
               .andWhere('liked.itemId = :itemId', { itemId: itemId })
               .getOne()
-            if (typeof isCheckedLiked === 'undefined') {
-              isCheckLiked = false
+            if (typeof checkIsLiked === 'undefined') {
+              isLiked = false
             } else {
-              isCheckLiked = true
+              isLiked = true
             }
           }
           if (typeof itemInfo !== 'undefined') {
@@ -247,7 +249,7 @@ export default {
               tag: tagItems.map((data) => {
                 return data.tag
               }),
-              isLiked: isCheckLiked,
+              isLiked: isLiked,
             }
             return resultItemInfo
           } else {
@@ -383,15 +385,6 @@ export default {
     return tagAndItemInfo
   },
 
-  // 되는코드
-  // const tagInfo = await getRepository(TagItem)
-  // .createQueryBuilder('tagItem')
-  // .leftJoinAndSelect('tagItem.tag', 'tag')
-  // .where('tag.id = :id', { id: tagId })
-  // .leftJoinAndSelect('item.type', 'type')
-  // .andWhere('item.type = :type', { type: type })
-  // .getMany()
-
   getCoffeeCharacter: async (coffeeCharacterId: number) => {
     const coffeeCharacter = await getRepository(CoffeeCharacter).findOne({
       where: { id: coffeeCharacterId },
@@ -406,9 +399,131 @@ export default {
     return productCharacter
   },
 
-  getAllItemInfo: async (target: string) => {
-    const allItemInfo = await getRepository(Item).find({ where: { type: target } })
-    console.log(allItemInfo)
-    return allItemInfo
+  getAllItemInfo: async (userId: number | null) => {
+    //   const allItemInfo = await getRepository(Item).find({ where: { type: target } })
+    //   console.log(allItemInfo)
+    //   return allItemInfo
+    // },
+
+    try {
+      if (userId) {
+        const allItemInfo = await getRepository(Item).find()
+        console.log(allItemInfo)
+      } else {
+        const allITemInfo = await getRepository(Item).find()
+      }
+    } catch {
+      throw new Error('정확한 정보를 입력해 주세요')
+    }
+    //   if (typeof itemId === 'undefined') {
+    //     throw new Error('정확한 정보를 입력해 주세요')
+    //   } else {
+
+    //       let isLiked: boolean
+    //       if (userId === null) {
+    //         isLiked = false
+    //       } else {
+    //         console.log('////////////////itemId ', itemId)
+    //         console.log('@@@@@@@@@@@@@2userId: ', userId)
+    //         const checkIsLiked = await getRepository(Liked)
+    //           .createQueryBuilder('liked')
+    //           .where('liked.userId = :userId', { userId: userId })
+    //           .andWhere('liked.itemId = :itemId', { itemId: itemId })
+    //           .getOne()
+    //         console.log('checkIsLiked!!!@!!//', checkIsLiked)
+    //         if (typeof checkIsLiked === 'undefined') {
+    //           isLiked = false
+    //         } else {
+    //           isLiked = true
+    //         }
+    //       }
+    //       if (typeof itemInfo !== 'undefined') {
+    //         const {
+    //           id,
+    //           itemName,
+    //           itemPrice,
+    //           itemDetail,
+    //           type,
+    //           productCharacterId,
+    //           coffeeCharacterId,
+    //           coffeeCharacter,
+    //           tagItems,
+    //         } = itemInfo
+    //         const resultItemInfo: coffeeItemInfo = {
+    //           id: id,
+    //           itemName: itemName,
+    //           itemPrice: itemPrice,
+    //           itemDetail: itemDetail,
+    //           type: type,
+    //           productCharacterId: productCharacterId,
+    //           coffeeCharacterId: coffeeCharacterId,
+    //           coffeeCharacter: coffeeCharacter,
+    //           tag: tagItems.map((data) => {
+    //             return data.tag
+    //           }),
+    //           isLiked: isLiked,
+    //         }
+    //         console.log(resultItemInfo)
+    //         return resultItemInfo
+    //       } else {
+    //         throw new Error('정확한 정보를 입력해 주세요')
+    //       }
+    //     } else if (targetItem!.type === 'product') {
+    //       const itemInfo = await getRepository(Item)
+    //         .createQueryBuilder('item')
+    //         .leftJoinAndSelect('item.productCharacter', 'productCharacter')
+    //         .leftJoinAndSelect('item.tagItems', 'tagItem')
+    //         .leftJoinAndSelect('tagItem.tag', 'tag')
+    //         .where('item.id = :id', { id: itemId })
+    //         .getOne()
+    //       let isLiked: boolean
+    //       if (userId === null) {
+    //         isLiked = false
+    //       } else {
+    //         const checkIsLiked = await getRepository(Liked)
+    //           .createQueryBuilder('liked')
+    //           .where('liked.userId = :userId', { userId: userId })
+    //           .andWhere('liked.itemId = :itemId', { itemId: itemId })
+    //           .getOne()
+    //         if (typeof checkIsLiked === 'undefined') {
+    //           isLiked = false
+    //         } else {
+    //           isLiked = true
+    //         }
+    //       }
+    //       if (typeof itemInfo !== 'undefined') {
+    //         const {
+    //           id,
+    //           itemName,
+    //           itemPrice,
+    //           itemDetail,
+    //           type,
+    //           productCharacterId,
+    //           coffeeCharacterId,
+    //           productCharacter,
+    //           tagItems,
+    //         } = itemInfo
+    //         const resultItemInfo: productItemInfo = {
+    //           id: id,
+    //           itemName: itemName,
+    //           itemPrice: itemPrice,
+    //           itemDetail: itemDetail,
+    //           type: type,
+    //           productCharacterId: productCharacterId,
+    //           coffeeCharacterId: coffeeCharacterId,
+    //           productCharacter: productCharacter,
+    //           tag: tagItems.map((data) => {
+    //             return data.tag
+    //           }),
+    //           isLiked: isLiked,
+    //         }
+    //         return resultItemInfo
+    //       } else {
+    //         throw new Error('정확한 정보를 입력해 주세요')
+    //       }
+    //     }
+    //   }
+    // } catch {
+    //   throw new Error('정확한 정보를 입력해 주세요')
   },
 }

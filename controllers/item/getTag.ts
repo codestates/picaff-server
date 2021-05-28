@@ -2,6 +2,7 @@ import Tag from '@entity/Tag.entity'
 import TagItem from '@entity/TagItem.entity'
 import Item from '@entity/Item.entity'
 import { default as interfaces } from '@interface/index'
+import { default as token } from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { createQueryBuilder, getRepository } from 'typeorm'
 
