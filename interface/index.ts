@@ -1,7 +1,5 @@
 import User from '@entity/User.entity'
 import Item from '@entity/Item.entity'
-import ProductCharacter from '@entity/ProductCharacter.entity'
-import CoffeeCharacter from '@entity/CoffeeCharacter.entity'
 import TestResult from '@entity/TestResult.entity'
 import TagItem from '@entity/TagItem.entity'
 import Liked from '@entity/Liked.entity'

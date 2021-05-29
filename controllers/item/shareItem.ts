@@ -4,8 +4,7 @@ import { getConnection, getRepository } from 'typeorm'
 
 const shareItem = async (req: Request, res: Response) => {
   const { authorization } = req.headers
-
-  if (!authorization) {
+  if (authorization) {
     try {
       await getConnection()
         .createQueryBuilder()

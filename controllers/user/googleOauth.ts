@@ -47,7 +47,7 @@ const googleOauth = async (req: Request, res: Response) => {
                   accessToken: accessToken,
                 },
               })
-          } else throw error('incorrect info...')
+          } else throw error({ message: '정확한 정보를 입력해주세요' })
         } else {
           await interfaces.createUser(email, userName, password)
           const userInfo = await interfaces.getUserInfo(email)
