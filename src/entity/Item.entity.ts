@@ -23,7 +23,7 @@ export default class Item {
   type!: string
 
   @Column({ default: '' })
-  imageUrl!: string
+  imageURL!: string
 
   @Column({ type: 'varchar' })
   iso!: string

@@ -24,6 +24,7 @@ const signIn = async (req: Request, res: Response) => {
           email: email,
           auth: {
             accessToken: accessToken,
+            refreshToken: refreshToken,
           },
         })
     } else {

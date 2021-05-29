@@ -1,6 +1,7 @@
 import token from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
+import { userInfo } from '@interface/type'
 
 const userInfo = async (req: Request, res: Response) => {
   if (!req.headers.authorization) {
@@ -10,7 +11,6 @@ const userInfo = async (req: Request, res: Response) => {
     try {
       const verifyToken = token.verifyToken(accessToken)
       const userInfo = await interfaces.getUserInfo(verifyToken.email)
-
       const testInfo = await interfaces.getTestResultInfo(verifyToken.id, verifyToken, null, false)
 
       const likedCoffeeList = await interfaces.getLiked(verifyToken.id, 'coffee')
@@ -18,22 +18,23 @@ const userInfo = async (req: Request, res: Response) => {
       if (typeof testInfo === 'string') {
         return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
       }
-      const testCoffeeIndex = testInfo.map((data) => {
-        return data.coffeeTypeId
-      })
-      const testProductIndex = testInfo.map((data) => {
-        return data.itemTypeId
-      })
-      const testResultIndex = testCoffeeIndex.concat(testProductIndex)
+      const userData: userInfo = {
+        id: verifyToken.id,
+        userName: verifyToken.userName,
+        email: verifyToken.email,
+      }
       const testResult = await Promise.all(
         testInfo.map(async (data) => {
-          const coffee = await interfaces.getItemInfo(data.coffeeTypeId, verifyToken.id)
-          const product = await interfaces.getItemInfo(data.itemTypeId, verifyToken.id)
-          return { coffeeResult: coffee, productResult: product }
+          const resultItemInfo = await interfaces.getTestResultItem(
+            data.coffeeTypeId,
+            data.itemTypeId,
+            userData.id
+          )
+          return resultItemInfo
         })
       )
       return res.status(200).send({
-        userInfo: userInfo,
+        userInfo: userData,
         testResult: testResult,
         likedCoffeeList: likedCoffeeList,
         likedProductList: likedProductList,
