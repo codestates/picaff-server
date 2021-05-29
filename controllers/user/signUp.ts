@@ -3,7 +3,7 @@ import { default as interfaces } from '@interface/index'
 
 const signUp = async (req: Request, res: Response) => {
   try {
-    const isSignUpUser = await interfaces.isCheckUser(req.body.email)
+    const isSignUpUser = await interfaces.isCheckedUser(req.body.email)
     if (isSignUpUser) {
       return res.status(403).send({ message: '이미 가입되어 있는 이메일 주소입니다.' })
     } else {
