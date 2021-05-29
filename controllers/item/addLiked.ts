@@ -9,7 +9,7 @@ const addLiked = async (req: Request, res: Response) => {
     return res.send(40).send('itemId undefined.')
   } else {
     try {
-      if (req.headers.authorization !== undefined) {
+      if (!req.headers.authorization) {
         if (req.headers.authorization) {
           const authorization: string = req.headers.authorization
           const itemId = Number(req.query.itemId)
