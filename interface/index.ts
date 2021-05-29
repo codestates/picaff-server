@@ -1,6 +1,7 @@
 import { getRepository, getConnection, Any } from 'typeorm'
 import User from '@entity/User.entity'
 import TestResult from '@entity/TestResult.entity'
+import TagItem from '@entity/TagItem.entity'
 import Item from '@entity/Item.entity'
 import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
 import Liked from '@entity/Liked.entity'
@@ -349,9 +350,10 @@ export default {
     }
     return testResult
   },
+
   getTestResultItem: async (coffeeId: number, productId: number, userId: number) => {
-    let coffeeResult: coffeeItemInfo | object;
-    let productResult: productItemInfo | object;
+    let coffeeResult: coffeeItemInfo | object
+    let productResult: productItemInfo | object
     const coffeeInfo = await getRepository(Item)
       .createQueryBuilder('item')
       .leftJoinAndSelect('item.coffeeCharacter', 'coffeeCharacter')
@@ -402,64 +404,76 @@ export default {
         }),
         isLiked: isCheckLiked,
       }
-      coffeeResult = resultItemInfo;
+      coffeeResult = resultItemInfo
     } else {
-      coffeeResult = {};
+      coffeeResult = {}
     }
     const productInfo = await getRepository(Item)
-            .createQueryBuilder('item')
-            .leftJoinAndSelect('item.productCharacter', 'productCharacter')
-            .leftJoinAndSelect('item.tagItems', 'tagItem')
-            .leftJoinAndSelect('tagItem.tag', 'tag')
-            .where('item.id = :id', { id: productId })
-            .getOne()
-          if (userId === null) {
-            isCheckLiked = false
-          } else {
-            const CheckIsLiked = await getRepository(Liked)
-              .createQueryBuilder('liked')
-              .where('liked.userId = :userId', { userId: userId })
-              .andWhere('liked.itemId = :itemId', { itemId: productId })
-              .getOne()
-            if (typeof CheckIsLiked === 'undefined') {
-              isCheckLiked = false
-            } else {
-              isCheckLiked = true
-            }
-          }
-          if (typeof productInfo !== 'undefined') {
-            const {
-              id,
-              itemName,
-              itemPrice,
-              itemDetail,
-              type,
-              iso,
-              productCharacterId,
-              coffeeCharacterId,
-              productCharacter,
-              tagItems,
-            } = productInfo
-            const resultItemInfo: productItemInfo = {
-              id: id,
-              itemName: itemName,
-              itemPrice: itemPrice,
-              itemDetail: itemDetail,
-              type: type,
-              iso: iso,
-              productCharacterId: productCharacterId,
-              coffeeCharacterId: coffeeCharacterId,
-              productCharacter: productCharacter,
-              tag: tagItems.map((data) => {
-                return data.tag
-              }),
-              isLiked: isCheckLiked,
-            }
-            productResult = resultItemInfo;
-          } else {
-            productResult = {};
-          }
+      .createQueryBuilder('item')
+      .leftJoinAndSelect('item.productCharacter', 'productCharacter')
+      .leftJoinAndSelect('item.tagItems', 'tagItem')
+      .leftJoinAndSelect('tagItem.tag', 'tag')
+      .where('item.id = :id', { id: productId })
+      .getOne()
+    if (userId === null) {
+      isCheckLiked = false
+    } else {
+      const CheckIsLiked = await getRepository(Liked)
+        .createQueryBuilder('liked')
+        .where('liked.userId = :userId', { userId: userId })
+        .andWhere('liked.itemId = :itemId', { itemId: productId })
+        .getOne()
+      if (typeof CheckIsLiked === 'undefined') {
+        isCheckLiked = false
+      } else {
+        isCheckLiked = true
+      }
+    }
+    if (typeof productInfo !== 'undefined') {
+      const {
+        id,
+        itemName,
+        itemPrice,
+        itemDetail,
+        type,
+        iso,
+        productCharacterId,
+        coffeeCharacterId,
+        productCharacter,
+        tagItems,
+      } = productInfo
+      const resultItemInfo: productItemInfo = {
+        id: id,
+        itemName: itemName,
+        itemPrice: itemPrice,
+        itemDetail: itemDetail,
+        type: type,
+        iso: iso,
+        productCharacterId: productCharacterId,
+        coffeeCharacterId: coffeeCharacterId,
+        productCharacter: productCharacter,
+        tag: tagItems.map((data) => {
+          return data.tag
+        }),
+        isLiked: isCheckLiked,
+      }
+      productResult = resultItemInfo
+    } else {
+      productResult = {}
+    }
 
-          return {coffeeResult: coffeeResult, productResult: productResult}
+    return { coffeeResult: coffeeResult, productResult: productResult }
+  },
+
+  getTagAndItemInfo: async (tagId: number, type: string) => {
+    const tagAndItemInfo = await getRepository(TagItem)
+      .createQueryBuilder('tagItem')
+      .leftJoinAndSelect('tagItem.tag', 'tag')
+      .leftJoinAndSelect('tagItem.item', 'item')
+      .where('tag.id = :id', { id: tagId })
+      .andWhere('item.type = :type', { type: type })
+      .getMany()
+
+    return tagAndItemInfo
   },
 }
