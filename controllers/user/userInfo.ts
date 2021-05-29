@@ -10,9 +10,9 @@ const userInfo = async (req: Request, res: Response) => {
     try {
       const verifyToken = token.verifyToken(accessToken)
       const userInfo = await interfaces.getUserInfo(verifyToken.email)
-      console.log(userInfo)
+
       const testInfo = await interfaces.getTestResultInfo(verifyToken.id, verifyToken, null, false)
-      console.log(testInfo)
+
       const likedCoffeeList = await interfaces.getLiked(verifyToken.id, 'coffee')
       const likedProductList = await interfaces.getLiked(verifyToken.id, 'product')
       if (typeof testInfo === 'string') {
