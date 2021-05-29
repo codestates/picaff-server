@@ -8,7 +8,7 @@ import { default as interfaces } from '@interface/index'
 const googleOauth = async (req: Request, res: Response) => {
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
   const myToken: string = req.body.id_token
-  console.log('here')
+
   console.log(myToken)
   async function verify() {
     const ticket: LoginTicket = await client.verifyIdToken({
@@ -36,7 +36,7 @@ const googleOauth = async (req: Request, res: Response) => {
               checkUser.email,
               checkUser.userName
             )
-            res
+            return res
               .status(200)
               .cookie('refreshToken', refreshToken, { httpOnly: true })
               .send({
@@ -63,7 +63,7 @@ const googleOauth = async (req: Request, res: Response) => {
             userInfo.userName
           )
 
-          res
+          return res
             .status(201)
             .cookie('refreshToken', refreshToken, { httpOnly: true })
             .send({
@@ -76,12 +76,12 @@ const googleOauth = async (req: Request, res: Response) => {
             })
         }
       } else {
-        res.status(404).send('log-in failed. invalid email.')
+        return res.status(401).send({ message: '권한이 없습니다.' })
       }
     }
   }
   verify().catch((err) => {
-    res.status(401).send('Unauthroized. Token used too late.')
+    return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   })
 }
 

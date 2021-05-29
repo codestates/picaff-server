@@ -13,11 +13,11 @@ const getItem = async (req: Request, res: Response) => {
       const data = token.verifyToken(accessToken)
       const userId = data.id
       const itemInfo = await interfaces.getItemInfo(itemId, userId)
-      res.status(200).send(itemInfo)
+      return res.status(200).send(itemInfo)
     } else {
       const itemId = Number(req.query.itemId)
       const itemInfo = await interfaces.getItemInfo(itemId, null)
-      res.status(200).send(itemInfo)
+      return res.status(200).send(itemInfo)
     }
   }
 }

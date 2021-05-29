@@ -26,16 +26,16 @@ export default class Item {
   @Column()
   itemPrice!: number
 
-  @Column()
+  @Column('text')
   itemDetail!: string
 
   @Column()
   type!: string
 
-  @Column({ default: null })
+  @Column({ default: '' })
   imageUrl!: string
 
-  @Column({ default: null })
+  @Column({ type: 'varchar' })
   iso!: string
 
   @OneToMany(() => TestResult, (testResult) => testResult.itemType)

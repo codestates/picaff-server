@@ -34,7 +34,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
           checkUser.email,
           checkUser.userName
         )
-        res
+        return res
           .status(200)
           .cookie('refreshToken', refreshToken, { httpOnly: true })
           .send({
@@ -59,7 +59,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
             oauthUserInfo.email,
             oauthUserInfo.userName
           )
-          res
+          return res
             .status(201)
             .cookie('refreshToken', refreshToken, { httpOnly: true })
             .send({
@@ -74,7 +74,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
       }
     }
   } catch (err) {
-    res.status(400).send('Invalid token')
+    return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   }
 }
 

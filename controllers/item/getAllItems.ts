@@ -4,7 +4,7 @@ import { default as token } from '@middleware/jwt'
 
 const getAllItems = async (req: Request, res: Response) => {
   try {
-    if (req.query.type === undefined) {
+    if (!req.query.type) {
       return res.status(404).send('정확한 정보를 입력해 주세요')
     } else {
       if (req.headers.authorization) {
@@ -16,22 +16,22 @@ const getAllItems = async (req: Request, res: Response) => {
         const type = String(req.query.type)
         const allItemInfo = await interfaces.getAllItemInfo(userId, type)
         if (type === 'coffee') {
-          res.status(200).send({ allCoffeeItemInfo: allItemInfo }) // 이렇게 할지 or allItemInfo 그대로 넣을지 의견 묻기.
+          return res.status(200).send({ allCoffeeItemInfo: allItemInfo }) // 이렇게 할지 or allItemInfo 그대로 넣을지 의견 묻기.
         } else if (type === 'product') {
-          res.status(200).send({ allProductItemInfo: allItemInfo })
+          return res.status(200).send({ allProductItemInfo: allItemInfo })
         }
       } else {
         const type = String(req.query.type)
         const allItemInfo = await interfaces.getAllItemInfo(null, type)
         if (type === 'coffee') {
-          res.status(200).send({ allCoffeeItemInfo: allItemInfo })
+          return res.status(200).send({ allCoffeeItemInfo: allItemInfo })
         } else if (type === 'product') {
-          res.status(200).send({ allProductItemInfo: allItemInfo })
+          return res.status(200).send({ allProductItemInfo: allItemInfo })
         }
       }
     }
   } catch (err) {
-    res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
+    return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   }
 }
 

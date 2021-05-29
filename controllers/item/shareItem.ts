@@ -13,12 +13,12 @@ const shareItem = async (req: Request, res: Response) => {
         .set({ count: () => 'count + 1' })
         .where('id = :id', { id: 1 })
         .execute()
-      res.status(200).send('added count')
+      return res.status(200).send({ message: '공유되었습니다.' })
     } catch (err) {
-      res.status(403).send('Token expired')
+      return res.status(403).send({ message: '문제가 발생했습니다.' })
     }
   } else {
-    res.status(401).send('Invalid access token.')
+    return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   }
 }
 

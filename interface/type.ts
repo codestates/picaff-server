@@ -52,5 +52,3 @@ export type tag = {
   id: number
   tagName: string
 }
-
-export type likedArr<Array> = {}

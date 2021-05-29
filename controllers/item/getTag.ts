@@ -17,16 +17,16 @@ const getTag = async (req: Request, res: Response) => {
         }
       })
 
-      res.status(200).send({
+      return res.status(200).send({
         tagId: tagAndItemInfo[0].tagId,
         tagName: tagAndItemInfo[0].tag.tagName,
         tagItemList: refined,
       })
     } catch (err) {
-      res.send(404).send('잘못된 정보가 입력되었습니다.')
+      return res.send(404).send('잘못된 정보가 입력되었습니다.')
     }
   } else {
-    res.send(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
+    return res.send(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   }
 }
 
