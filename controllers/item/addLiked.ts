@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import { createQueryBuilder, getRepository, getConnection } from 'typeorm'
+import { getRepository, getConnection } from 'typeorm'
 import token from '@middleware/jwt'
 import 'dotenv/config'
 import Liked from '@entity/Liked.entity'
