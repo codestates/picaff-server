@@ -355,7 +355,6 @@ export default {
       .andWhere('item.type = :type', { type: type })
       .getMany()
 
-    console.log(tagAndItemInfo)
     return tagAndItemInfo
   },
 }
