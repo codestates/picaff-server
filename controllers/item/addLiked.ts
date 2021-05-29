@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import { createQueryBuilder, getRepository, getConnection } from 'typeorm'
+import { getRepository, getConnection } from 'typeorm'
 import token from '@middleware/jwt'
 import 'dotenv/config'
 import Liked from '@entity/Liked.entity'
@@ -29,23 +29,23 @@ const addLiked = async (req: Request, res: Response) => {
               .from(Liked)
               .where({ userId: id })
               .execute()
-            res.status(202).send()
+            return res.status(202).send()
           } else {
             const liked: Liked = new Liked()
             liked.userId = id
             liked.itemId = itemId
             await getRepository(Liked).save(liked)
 
-            res.status(201).send(liked)
+            return res.status(201).send(liked)
           }
         } else {
-          res.status(401).send('로그인상태와 엑세스토큰 확인이 필요합니다.')
+          return res.status(401).send('로그인상태와 엑세스토큰 확인이 필요합니다.')
         }
       } else {
-        res.status(401).send('로그인상태와 엑세스토큰 확인이 필요합니다.')
+        return res.status(401).send('로그인상태와 엑세스토큰 확인이 필요합니다.')
       }
     } catch (err) {
-      res.status(401).send('로그인상태와 엑세스토큰 확인이 필요합니다.')
+      return res.status(401).send('로그인상태와 엑세스토큰 확인이 필요합니다.')
     }
   }
 }

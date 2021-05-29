@@ -9,7 +9,6 @@ const googleOauth = async (req: Request, res: Response) => {
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
   const myToken: string = req.body.id_token
 
-  console.log(myToken)
   async function verify() {
     const ticket: LoginTicket = await client.verifyIdToken({
       idToken: myToken,
@@ -19,7 +18,7 @@ const googleOauth = async (req: Request, res: Response) => {
     if (typeof payload !== 'undefined') {
       const email = payload['email']!
       const userName = payload['name']!
-      const password = payload['sub']! // 21자리의 Google 회원 id 번호
+      const password = payload['sub']!
 
       if (payload.email_verified) {
         const checkUser = await interfaces.getGoogleUserInfo(email)

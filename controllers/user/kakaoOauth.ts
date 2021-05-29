@@ -22,7 +22,6 @@ const kakaoOauth = async (req: Request, res: Response) => {
 
     if (verifyTokenInfo.status === 200) {
       const checkUser = await interfaces.getKakaoUserInfo('kakaoUser' + id)
-      console.log(checkUser)
       if (checkUser) {
         const accessToken = token.generateAccessToken(
           checkUser.id,

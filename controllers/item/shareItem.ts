@@ -13,7 +13,7 @@ const shareItem = async (req: Request, res: Response) => {
         .where('id = :id', { id: 1 })
         .execute()
       let sharedInfo = await getRepository(Shared).findOne({ where: { id: 1 } })
-      console.log(sharedInfo!.count)
+
       if (sharedInfo === undefined) {
         return res.status(404).send({ message: '정확한 정보를 입력해주세요.' })
       } else {

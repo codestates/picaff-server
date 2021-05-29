@@ -24,17 +24,10 @@ export const CoffeeCharacterDataSeed = [
     afterTaste: 3,
   },
   {
-<<<<<<< HEAD
-    sweetness: 3,
-    sourness: 4,
-    balance: 3,
-    body: 2,
-=======
     sweetness: 4,
     sourness: 3,
     balance: 4,
     body: 4,
->>>>>>> ee905eeaa802e4f369989de6bd4a8a0443abcc5c
     aroma: 3,
     afterTaste: 4,
   },
