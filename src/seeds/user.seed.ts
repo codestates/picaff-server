@@ -19,4 +19,9 @@ export const UserDataSeed = [
     userName: "mirae",
     password: "test",
   },
+  {
+    email: "lucky@google.com",
+    userName: "Kimlucky",
+    password: "test"
+  }
 ];
