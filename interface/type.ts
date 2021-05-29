@@ -33,7 +33,7 @@ export type coffeeItemInfo = {
   coffeeCharacterId: number | null
   coffeeCharacter: object
   tag: Array<tag>
-  isLiked: boolean;
+  isLiked: boolean
 }
 export type productItemInfo = {
   id: number
@@ -46,7 +46,7 @@ export type productItemInfo = {
   coffeeCharacterId: number | null
   productCharacter: object
   tag: Array<tag>
-  isLiked: boolean;
+  isLiked: boolean
 }
 
 export type tag = {

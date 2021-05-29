@@ -19,11 +19,11 @@ export default class Item {
   @Column('text')
   itemDetail!: string
 
+  @Column({ default: '' })
+  imageURL!: string
+
   @Column()
   type!: string
-
-  @Column({default: ''})
-  imageURL!: string
 
   @Column({ type: 'varchar' })
   iso!: string

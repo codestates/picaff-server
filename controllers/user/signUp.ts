@@ -10,7 +10,11 @@ const signUp = async (req: Request, res: Response) => {
       if (req.body.email === '' || req.body.email === null) {
         return res.status(404).send({ message: '정확한 정보를 입력해 주십시오.' })
       } else {
-        const user = await interfaces.createUser(req.body.email, req.body.userName, req.body.password);
+        const user = await interfaces.createUser(
+          req.body.email,
+          req.body.userName,
+          req.body.password
+        )
         const userInfo = await interfaces.getUserInfo(user.email)
         const { id, email, userName } = userInfo
         res.status(201).send({

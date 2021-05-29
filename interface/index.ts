@@ -335,6 +335,7 @@ export default {
       return itemList
     }
   },
+
   createTestInfo: async (userId: number | null, coffeeType: number, itemType: number) => {
     const testResult: TestResult = await new TestResult()
     if (typeof userId === 'number') {
@@ -473,7 +474,6 @@ export default {
       .where('tag.id = :id', { id: tagId })
       .andWhere('item.type = :type', { type: type })
       .getMany()
-
     return tagAndItemInfo
   },
 }
