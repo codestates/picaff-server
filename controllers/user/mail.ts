@@ -14,13 +14,8 @@ const makeSerial = (): string => {
 
 const mail = async (req: Request, res: Response) => {
   const { email } = req.body
-<<<<<<< HEAD
   const isExistEmail = await interfaces.isCheckedUser(email)
   if (isExistEmail) return res.status(401).send({ message: '이미 사용중인 메일주소입니다.' })
-=======
-  const isExistEmail = await interfaces.isCheckedUser(email);
-  if(isExistEmail) return res.status(401).send({ message: '이미 사용중인 메일주소입니다.'});
->>>>>>> ee905eeaa802e4f369989de6bd4a8a0443abcc5c
 
   //이미 존재하는 메일 여부 체크 유저정보에서 확인해서 예외처리
   const serialnum = makeSerial()

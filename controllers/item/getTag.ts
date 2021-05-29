@@ -22,7 +22,7 @@ const getTag = async (req: Request, res: Response) => {
         tagItemList: refined,
       })
     } catch (err) {
-      return res.send(404).send('잘못된 정보가 입력되었습니다.')
+      return res.send(404).send({ message: '잘못된 정보가 입력되었습니다.' })
     }
   } else {
     return res.send(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
