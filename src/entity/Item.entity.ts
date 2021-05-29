@@ -17,11 +17,17 @@ export default class Item {
   @Column()
   itemPrice!: number
 
-  @Column()
+  @Column('text')
   itemDetail!: string
+
+  @Column({ default: '' })
+  imageURL!: string
 
   @Column()
   type!: string
+
+  @Column({ type: 'varchar' })
+  iso!: string
 
   @OneToMany(() => TestResult, (testResult) => testResult.itemType)
   itemResults!: TestResult[]

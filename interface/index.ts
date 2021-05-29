@@ -1,9 +1,11 @@
 import { getRepository, getConnection } from 'typeorm'
 import User from '@entity/User.entity'
-import TestResult from '@entity/TestResult.entity'
-import Item from '@entity/Item.entity'
-import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
 import Liked from '@entity/Liked.entity'
+import Item from '@entity/Item.entity'
+import TagItem from '@entity/TagItem.entity'
+import TestResult from '@entity/TestResult.entity'
+import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
+import { isObject } from 'util'
 
 export default {
   isCheckUser: async (target: string) => {
@@ -124,11 +126,11 @@ export default {
   },
   getItemInfo: async (itemId: number, userId: number | null) => {
     try {
-      const itemEntity = await getRepository(Item).findOne({ where: { id: itemId } })
+      const targetItem = await getRepository(Item).findOne({ where: { id: itemId } })
       if (typeof itemId === 'undefined') {
         throw new Error('정확한 정보를 입력해 주세요')
       } else {
-        if (itemEntity!.type === 'coffee') {
+        if (targetItem!.type === 'coffee') {
           const itemInfo = await getRepository(Item)
             .createQueryBuilder('item')
             .leftJoinAndSelect('item.coffeeCharacter', 'coffeeCharacter')
@@ -136,19 +138,19 @@ export default {
             .leftJoinAndSelect('tagItem.tag', 'tag')
             .where('item.id = :id', { id: itemId })
             .getOne()
-          let isCheckLiked: boolean
+          let isLiked: boolean
           if (userId === null) {
-            isCheckLiked = false
+            isLiked = false
           } else {
-            const isCheckedLiked = await getRepository(Liked)
+            const checkIsLiked = await getRepository(Liked)
               .createQueryBuilder('liked')
               .where('liked.userId = :userId', { userId: userId })
               .andWhere('liked.itemId = :itemId', { itemId: itemId })
               .getOne()
-            if (typeof isCheckedLiked === 'undefined') {
-              isCheckLiked = false
+            if (typeof checkIsLiked === 'undefined') {
+              isLiked = false
             } else {
-              isCheckLiked = true
+              isLiked = true
             }
           }
           if (typeof itemInfo !== 'undefined') {
@@ -158,7 +160,7 @@ export default {
               itemPrice,
               itemDetail,
               type,
-              categoryId,
+              iso,
               productCharacterId,
               coffeeCharacterId,
               coffeeCharacter,
@@ -170,20 +172,20 @@ export default {
               itemPrice: itemPrice,
               itemDetail: itemDetail,
               type: type,
-              categoryId: categoryId,
+              iso: iso,
               productCharacterId: productCharacterId,
               coffeeCharacterId: coffeeCharacterId,
               coffeeCharacter: coffeeCharacter,
               tag: tagItems.map((data) => {
                 return data.tag
               }),
-              isLiked: isCheckLiked,
+              isLiked: isLiked,
             }
             return resultItemInfo
           } else {
             throw new Error('정확한 정보를 입력해 주세요')
           }
-        } else if (itemEntity!.type === 'machine') {
+        } else if (targetItem!.type === 'machine') {
           const itemInfo = await getRepository(Item)
             .createQueryBuilder('item')
             .leftJoinAndSelect('item.productCharacter', 'productCharacter')
@@ -195,12 +197,12 @@ export default {
           if (userId === null) {
             isCheckLiked = false
           } else {
-            const isCheckedLiked = await getRepository(Liked)
+            const checkIsLiked = await getRepository(Liked)
               .createQueryBuilder('liked')
               .where('liked.userId = :userId', { userId: userId })
               .andWhere('liked.itemId = :itemId', { itemId: itemId })
               .getOne()
-            if (typeof isCheckedLiked === 'undefined') {
+            if (typeof checkIsLiked === 'undefined') {
               isCheckLiked = false
             } else {
               isCheckLiked = true
@@ -213,7 +215,7 @@ export default {
               itemPrice,
               itemDetail,
               type,
-              categoryId,
+              iso,
               productCharacterId,
               coffeeCharacterId,
               productCharacter,
@@ -225,7 +227,7 @@ export default {
               itemPrice: itemPrice,
               itemDetail: itemDetail,
               type: type,
-              categoryId: categoryId,
+              iso: iso,
               productCharacterId: productCharacterId,
               coffeeCharacterId: coffeeCharacterId,
               productCharacter: productCharacter,
@@ -244,6 +246,7 @@ export default {
       throw new Error('정확한 정보를 입력해 주세요')
     }
   },
+
   getLiked: async (userId: number, type: string) => {
     if (type === 'coffee') {
       const likedItemList = await getRepository(Item)
@@ -262,7 +265,7 @@ export default {
           itemPrice,
           itemDetail,
           type,
-          categoryId,
+          iso,
           productCharacterId,
           coffeeCharacterId,
           coffeeCharacter,
@@ -274,7 +277,7 @@ export default {
           itemPrice: itemPrice,
           itemDetail: itemDetail,
           type: type,
-          categoryId: categoryId,
+          iso: iso,
           productCharacterId: productCharacterId,
           coffeeCharacterId: coffeeCharacterId,
           coffeeCharacter: coffeeCharacter,
@@ -303,7 +306,7 @@ export default {
           itemPrice,
           itemDetail,
           type,
-          categoryId,
+          iso,
           productCharacterId,
           coffeeCharacterId,
           productCharacter,
@@ -314,8 +317,8 @@ export default {
           itemName: itemName,
           itemPrice: itemPrice,
           itemDetail: itemDetail,
+          iso: iso,
           type: type,
-          categoryId: categoryId,
           productCharacterId: productCharacterId,
           coffeeCharacterId: coffeeCharacterId,
           productCharacter: productCharacter,
@@ -343,5 +346,205 @@ export default {
       await getRepository(TestResult).save(testResult)
     }
     return testResult
+  },
+
+  getTagAndItemInfo: async (tagId: number, type: string) => {
+    const tagAndItemInfo = await getRepository(TagItem)
+      .createQueryBuilder('tagItem')
+      .leftJoinAndSelect('tagItem.tag', 'tag')
+      .leftJoinAndSelect('tagItem.item', 'item')
+      .where('tag.id = :id', { id: tagId })
+      .andWhere('item.type = :type', { type: type })
+      .getMany()
+
+    console.log(tagAndItemInfo)
+    return tagAndItemInfo
+  },
+
+  getAllItemInfo: async (userId: number | null, type: string) => {
+    try {
+      if (userId !== undefined) {
+        if (type === 'coffee') {
+          const allItemInfoWithUserId = await getRepository(Item)
+            .createQueryBuilder('item')
+            .where('item.type = :type', { type: 'coffee' })
+            .leftJoinAndSelect('item.likeds', 'liked')
+            .leftJoinAndSelect('item.coffeeCharacter', 'coffeeCharacter')
+            .leftJoinAndSelect('item.tagItems', 'tagItem')
+            .leftJoinAndSelect('tagItem.tag', 'tag')
+            .getMany()
+
+          const coffeeItemList = await allItemInfoWithUserId.map((data) => {
+            const {
+              id,
+              itemName,
+              itemPrice,
+              itemDetail,
+              type,
+              iso,
+              likeds,
+              productCharacterId,
+              coffeeCharacterId,
+              coffeeCharacter,
+              tagItems,
+            } = data
+
+            let like = false
+            likeds.filter((el) => {
+              if (el.userId === userId && el.itemId === id) {
+                return (like = true)
+              }
+            })
+
+            let itemInfo: coffeeItemInfo = {
+              id: id,
+              itemName: itemName,
+              itemPrice: itemPrice,
+              itemDetail: itemDetail,
+              type: type,
+              iso: iso,
+              productCharacterId: productCharacterId,
+              coffeeCharacterId: coffeeCharacterId,
+              coffeeCharacter: coffeeCharacter,
+              tag: tagItems.map((data) => {
+                return data.tag
+              }),
+              isLiked: like,
+            }
+            return itemInfo
+          })
+          return coffeeItemList
+        } else if (type === 'product') {
+          const allItemInfoWithUserId = await getRepository(Item)
+            .createQueryBuilder('item')
+            .where('item.type = :type', { type: 'product' })
+            .leftJoinAndSelect('item.likeds', 'liked')
+            .leftJoinAndSelect('item.productCharacter', 'productCharacter')
+            .leftJoinAndSelect('item.tagItems', 'tagItem')
+            .leftJoinAndSelect('tagItem.tag', 'tag')
+            .getMany()
+          const productItemList = await allItemInfoWithUserId.map((data) => {
+            const {
+              id,
+              itemName,
+              itemPrice,
+              itemDetail,
+              type,
+              likeds,
+              coffeeCharacterId,
+              productCharacterId,
+              productCharacter,
+              tagItems,
+            } = data
+
+            let like = false
+            likeds.filter((el) => {
+              if (el.userId === userId && el.itemId === id) {
+                return (like = true)
+              }
+            })
+            let itemInfo: productItemInfo = {
+              id: id,
+              itemName: itemName,
+              itemPrice: itemPrice,
+              itemDetail: itemDetail,
+              type: type,
+              iso: '',
+              coffeeCharacterId: coffeeCharacterId,
+              productCharacterId: productCharacterId,
+              productCharacter: productCharacter,
+              tag: tagItems.map((data) => {
+                return data.tag
+              }),
+              isLiked: like,
+            }
+            return itemInfo
+          })
+          return productItemList
+        }
+      } else {
+        if (type === 'coffee') {
+          const allItemInfoWithoutUserId = await getRepository(Item)
+            .createQueryBuilder('item')
+            .where('item.type = :type', { type: type })
+            .leftJoinAndSelect('item.coffeeCharacter', 'coffeeCharacter')
+            .leftJoinAndSelect('item.tagItems', 'tagItem')
+            .leftJoinAndSelect('tagItem.tag', 'tag')
+            .getMany()
+          const coffeeItemList = await allItemInfoWithoutUserId.map((data) => {
+            const {
+              id,
+              itemName,
+              itemPrice,
+              itemDetail,
+              type,
+              iso,
+              productCharacterId,
+              coffeeCharacterId,
+              coffeeCharacter,
+              tagItems,
+            } = data
+            let itemInfo: coffeeItemInfo = {
+              id: id,
+              itemName: itemName,
+              itemPrice: itemPrice,
+              itemDetail: itemDetail,
+              type: type,
+              iso: iso,
+              productCharacterId: productCharacterId,
+              coffeeCharacterId: coffeeCharacterId,
+              coffeeCharacter: coffeeCharacter,
+              tag: tagItems.map((data) => {
+                return data.tag
+              }),
+              isLiked: false,
+            }
+            return itemInfo
+          })
+          return coffeeItemList
+        } else if (type === 'product') {
+          const allItemInfoWithUserId = await getRepository(Item)
+            .createQueryBuilder('item')
+            .where('item.type = :type', { type: 'product' })
+            .leftJoinAndSelect('item.likeds', 'liked')
+            .leftJoinAndSelect('item.productCharacter', 'productCharacter')
+            .leftJoinAndSelect('item.tagItems', 'tagItem')
+            .leftJoinAndSelect('tagItem.tag', 'tag')
+            .getMany()
+          const productItemList = await allItemInfoWithUserId.map((data) => {
+            const {
+              id,
+              itemName,
+              itemPrice,
+              itemDetail,
+              type,
+              coffeeCharacterId,
+              productCharacterId,
+              productCharacter,
+              tagItems,
+            } = data
+            let itemInfo: productItemInfo = {
+              id: id,
+              itemName: itemName,
+              itemPrice: itemPrice,
+              itemDetail: itemDetail,
+              type: type,
+              iso: '',
+              coffeeCharacterId: coffeeCharacterId,
+              productCharacterId: productCharacterId,
+              productCharacter: productCharacter,
+              tag: tagItems.map((data) => {
+                return data.tag
+              }),
+              isLiked: false,
+            }
+            return itemInfo
+          })
+          return productItemList
+        }
+      }
+    } catch {
+      throw new Error('정확한 정보를 입력해 주세요')
+    }
   },
 }

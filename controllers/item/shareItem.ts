@@ -13,12 +13,12 @@ const shareItem = async (req: Request, res: Response) => {
         .set({ count: () => 'count + 1' })
         .where('id = :id', { id: 1 })
         .execute()
-      res.status(200).send('added count')
+      return res.status(200).send('added count')
     } catch (err) {
-      res.status(403).send('Token expired')
+      return res.status(403).send('Token expired')
     }
   } else {
-    res.status(401).send('Invalid access token.')
+    return res.status(401).send('Invalid access token.')
   }
 }
 
