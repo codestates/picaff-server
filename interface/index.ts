@@ -1,9 +1,9 @@
 import { getRepository, getConnection, Any } from 'typeorm'
+import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
 import User from '@entity/User.entity'
+import Item from '@entity/Item.entity'
 import TestResult from '@entity/TestResult.entity'
 import TagItem from '@entity/TagItem.entity'
-import Item from '@entity/Item.entity'
-import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
 import Liked from '@entity/Liked.entity'
 
 export default {
@@ -119,6 +119,16 @@ export default {
   },
 
   getKakaoUserInfo: async (target: string) => {
+    const userEntity = getRepository(User)
+    const userInfo = await userEntity.findOne({ where: { email: target } })
+    if (typeof userInfo === 'undefined') {
+      return undefined
+    } else {
+      return userInfo
+    }
+  },
+
+  getGoogleUserInfo: async (target: string) => {
     const userEntity = getRepository(User)
     const userInfo = await userEntity.findOne({ where: { email: target } })
     if (typeof userInfo === 'undefined') {
@@ -250,6 +260,7 @@ export default {
       throw new Error('정확한 정보를 입력해 주세요')
     }
   },
+
   getLiked: async (userId: number, type: string) => {
     if (type === 'coffee') {
       const likedItemList = await getRepository(Item)

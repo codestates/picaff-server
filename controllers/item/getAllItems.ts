@@ -5,7 +5,6 @@ import { getRepository } from 'typeorm'
 import Item from '@entity/Item.entity'
 
 const getAllItems = async (req: Request, res: Response) => {
-  console.log(req)
   try {
     if (!req.query.type) {
       return res.status(404).send({ message: '잘못된 정보가 입력되었습니다.' })

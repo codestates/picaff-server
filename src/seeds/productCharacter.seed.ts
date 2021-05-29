@@ -19,4 +19,4 @@ export const ProductCharacterDataSeed = [
     convenience: 3,
     effectiveness: 5,
   },
-];
+]

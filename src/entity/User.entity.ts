@@ -5,33 +5,33 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   OneToMany,
-} from "typeorm";
-import Liked from "./Liked.entity";
-import TestResult from "./TestResult.entity";
+} from 'typeorm'
+import Liked from './Liked.entity'
+import TestResult from './TestResult.entity'
 
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
 
   @Column()
-  email!: string;
+  email!: string
 
   @Column()
-  password!: string;
+  password!: string
 
   @Column()
-  userName!: string;
+  userName!: string
 
-  @CreateDateColumn({ name: "created_at" })
-  createdAt!: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt!: Date
 
-  @UpdateDateColumn({ name: "updated_at" })
-  updatedAt!: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt!: Date
 
   @OneToMany(() => TestResult, (testResult) => testResult.user)
-  testResults!: TestResult[];
+  testResults!: TestResult[]
 
-  @OneToMany(() => Liked, (liked) => liked.user)
-  likeds!: Liked[];
+  @OneToMany(() => Liked, (liked) => liked.user, { cascade: true })
+  likeds!: Liked[]
 }

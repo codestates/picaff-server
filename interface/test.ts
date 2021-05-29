@@ -1,5 +1,5 @@
 export default {
-  resultCoffee: (coffeeScore:Array<number>) => {
+  resultCoffee: (coffeeScore: Array<number>) => {
     const coffeeResultScore: Array<number> = [0, 0, 0, 0, 0]
     coffeeScore.forEach((data, idx) => {
       if (idx === 0 && data > 3) {
@@ -49,13 +49,13 @@ export default {
       }
     })
 
-    let index:number = 0
+    let index: number = 0
     for (let i = 0; i < coffeeResultScore.length; i++) {
       if (coffeeResultScore[index] < coffeeResultScore[i]) index = i
     }
-    return index+1;
+    return index + 1
   },
-  resultProduct: (productScore:Array<number>) => {
+  resultProduct: (productScore: Array<number>) => {
     const productResultScore: Array<number> = [0, 0, 0, 0]
     productScore.forEach((data, idx) => {
       if (idx === 0 && data > 3) {
@@ -64,12 +64,12 @@ export default {
         productResultScore[2] -= data * 2
         productResultScore[3] += data * 2
       } else if (idx === 0 && data < 4) {
-        productResultScore[0] += data /2
+        productResultScore[0] += data / 2
         productResultScore[1] -= data
         productResultScore[2] += data * 1.5
         productResultScore[3] -= data * 2
-      } else if (idx === 1 && data > 2 ) {
-        productResultScore[0] += data /2
+      } else if (idx === 1 && data > 2) {
+        productResultScore[0] += data / 2
         productResultScore[1] -= data
         productResultScore[2] += data * 2
         productResultScore[3] -= data * 2
@@ -111,10 +111,10 @@ export default {
       }
     })
 
-    let index:number = 0
+    let index: number = 0
     for (let i = 0; i < productResultScore.length; i++) {
       if (productResultScore[index] < productResultScore[i]) index = i
     }
-    return index+6;
-  }
+    return index + 6
+  },
 }

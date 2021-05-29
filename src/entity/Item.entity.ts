@@ -33,10 +33,10 @@ export default class Item {
   @OneToMany(() => TestResult, (testResult) => testResult.coffeeType)
   coffeeResults!: TestResult[]
 
-  @OneToMany(() => Liked, (liked) => liked.item)
+  @OneToMany(() => Liked, (liked) => liked.item, { cascade: true })
   likeds!: Liked[]
 
-  @OneToMany(() => TagItem, (tagItem) => tagItem.item)
+  @OneToMany(() => TagItem, (tagItem) => tagItem.item, { cascade: true })
   tagItems!: TagItem[]
 
   @ManyToOne(() => ProductCharacter, (productCharacter) => productCharacter.items, {

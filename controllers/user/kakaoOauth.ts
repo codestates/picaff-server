@@ -22,7 +22,6 @@ const kakaoOauth = async (req: Request, res: Response) => {
 
     if (verifyTokenInfo.status === 200) {
       const checkUser = await interfaces.getKakaoUserInfo('kakaoUser' + id)
-      console.log(checkUser)
       if (checkUser) {
         const accessToken = token.generateAccessToken(
           checkUser.id,
@@ -34,7 +33,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
           checkUser.email,
           checkUser.userName
         )
-        res
+        return res
           .status(200)
           .cookie('refreshToken', refreshToken, { httpOnly: true })
           .send({
@@ -43,6 +42,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
             email: checkUser.email,
             auth: {
               accessToken: accessToken,
+              refreshToken: refreshToken,
             },
           })
       } else {
@@ -59,7 +59,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
             oauthUserInfo.email,
             oauthUserInfo.userName
           )
-          res
+          return res
             .status(201)
             .cookie('refreshToken', refreshToken, { httpOnly: true })
             .send({
@@ -74,7 +74,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
       }
     }
   } catch (err) {
-    res.status(400).send('Invalid token')
+    return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   }
 }
 

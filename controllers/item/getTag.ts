@@ -16,7 +16,6 @@ const getTag = async (req: Request, res: Response) => {
           type: el.item.type,
         }
       })
-
       return res.status(200).send({
         tagId: tagAndItemInfo[0].tagId,
         tagName: tagAndItemInfo[0].tag.tagName,

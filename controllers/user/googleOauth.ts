@@ -15,14 +15,13 @@ const googleOauth = async (req: Request, res: Response) => {
       audience: process.env.GOOGLE_CLIENT_ID,
     })
     const payload = ticket.getPayload()
-
     if (typeof payload !== 'undefined') {
       const email = payload['email']!
       const userName = payload['name']!
-      const password = payload['sub']! // 21자리의 Google 회원 id 번호
+      const password = payload['sub']!
 
       if (payload.email_verified) {
-        const checkUser = await interfaces.getUserInfo(email)
+        const checkUser = await interfaces.getGoogleUserInfo(email)
         if (checkUser) {
           const checkPassword = await (checkUser.password === password)
           if (checkPassword) {
@@ -36,7 +35,7 @@ const googleOauth = async (req: Request, res: Response) => {
               checkUser.email,
               checkUser.userName
             )
-            res
+            return res
               .status(200)
               .cookie('refreshToken', refreshToken, { httpOnly: true })
               .send({
@@ -45,43 +44,50 @@ const googleOauth = async (req: Request, res: Response) => {
                 email: checkUser.email,
                 auth: {
                   accessToken: accessToken,
+                  refreshToken: refreshToken,
                 },
               })
-          } else throw error('payload undefined...')
+          } else {
+            return res.status(404).send({ message: '유저 정보를 찾을 수 없습니다.' })
+          }
         } else {
-          res.status(404).send('log-in failed')
+          await interfaces.createUser(email, userName, password)
+          const userInfo = await interfaces.getUserInfo(email)
+
+          const accessToken = token.generateAccessToken(
+            userInfo.id,
+            userInfo.email,
+            userInfo.userName
+          )
+          const refreshToken = token.generateRefreshToken(
+            userInfo.id,
+            userInfo.email,
+            userInfo.userName
+          )
+
+          return res
+            .status(201)
+            .cookie('refreshToken', refreshToken, { httpOnly: true })
+            .send({
+              id: userInfo.id,
+              userName: userInfo.userName,
+              email: userInfo.email,
+              auth: {
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+              },
+            })
         }
       } else {
-        await interfaces.createUser(email, userName, password)
-        const userInfo = await interfaces.getUserInfo(email)
-
-        const accessToken = token.generateAccessToken(
-          userInfo.id,
-          userInfo.email,
-          userInfo.userName
-        )
-        const refreshToken = token.generateRefreshToken(
-          userInfo.id,
-          userInfo.email,
-          userInfo.userName
-        )
-
-        res
-          .status(201)
-          .cookie('refreshToken', refreshToken, { httpOnly: true })
-          .send({
-            id: userInfo.id,
-            userName: userInfo.userName,
-            email: userInfo.email,
-            auth: {
-              accessToken: accessToken,
-            },
-          })
+        return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
       }
+    } else {
+      return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
     }
   }
+
   verify().catch((err) => {
-    res.status(401).send('Unauthroized. Token used too late.')
+    return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   })
 }
 

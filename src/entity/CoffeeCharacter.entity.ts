@@ -1,29 +1,29 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import Item from "./Item.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import Item from './Item.entity'
 
 @Entity()
 export default class CoffeeCharacter {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
 
   @Column()
-  sweetness!: number;
+  sweetness!: number
 
   @Column()
-  sourness!: number;
+  sourness!: number
 
   @Column()
-  balance!: number;
+  balance!: number
 
   @Column()
-  body!: number;
+  body!: number
 
   @Column()
-  aroma!: number;
+  aroma!: number
 
   @Column()
-  afterTaste!: number;
+  afterTaste!: number
 
   @OneToMany(() => Item, (item) => item.coffeeCharacter)
-  items!: Item[];
+  items!: Item[]
 }
