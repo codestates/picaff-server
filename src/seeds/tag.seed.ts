@@ -1,14 +1,29 @@
 export const TagDataSeed = [
   {
-    tagName: "sweet",
+    tagName: "Africa",
   },
   {
-    tagName: "bitter",
+    tagName: "Latin America",
   },
   {
-    tagName: "wellmade",
+    tagName: "Sweetness",
   },
   {
-    tagName: "cheap",
+    tagName: "Acidity",
+  },
+  {
+    tagName: "Heavy body",
+  },
+  {
+    tagName: "Professional",
+  },
+  {
+    tagName: "Beginner",
+  },
+  {
+    tagName: "Easy clean",
+  },
+  {
+    tagName: "Elaborate",
   },
 ];

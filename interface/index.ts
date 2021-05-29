@@ -1,10 +1,10 @@
 import { getRepository, getConnection, Any } from 'typeorm'
 import User from '@entity/User.entity'
 import TestResult from '@entity/TestResult.entity'
+import TagItem from '@entity/TagItem.entity'
 import Item from '@entity/Item.entity'
 import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
 import Liked from '@entity/Liked.entity'
-import TagItem from '@entity/TagItem.entity'
 
 export default {
   isCheckedUser: async (target: string) => {
@@ -335,6 +335,7 @@ export default {
       return itemList
     }
   },
+
   createTestInfo: async (userId: number | null, coffeeType: number, itemType: number) => {
     const testResult: TestResult = await new TestResult()
     if (typeof userId === 'number') {
@@ -350,6 +351,7 @@ export default {
     }
     return testResult
   },
+
   getTestResultItem: async (coffeeId: number, productId: number, userId: number) => {
     let coffeeResult: coffeeItemInfo | object
     let productResult: productItemInfo | object
@@ -463,6 +465,7 @@ export default {
 
     return { coffeeResult: coffeeResult, productResult: productResult }
   },
+
   getTagAndItemInfo: async (tagId: number, type: string) => {
     const tagAndItemInfo = await getRepository(TagItem)
       .createQueryBuilder('tagItem')

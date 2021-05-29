@@ -48,6 +48,7 @@ export type productItemInfo = {
   tag: Array<tag>
   isLiked: boolean
 }
+
 export type tag = {
   id: number
   tagName: string
