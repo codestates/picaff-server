@@ -1,12 +1,6 @@
 export default {
-  resultCoffee: (coffeeScore:Array<number>) => {
-    // let kenya:number = 0;
-    // let columbia:number = 0;
-    // let brazil:number = 0;
-    // let guatemala:number = 0;
-    // let yirgacheffe:number = 0;
+  resultCoffee: (coffeeScore: Array<number>) => {
     const coffeeResultScore: Array<number> = [0, 0, 0, 0, 0]
-    // ? kenya, columbia, brazil, guatemala, yirgacheffe 순서입니다.
     coffeeScore.forEach((data, idx) => {
       if (idx === 0 && data > 3) {
         coffeeResultScore[0] -= data * 2
@@ -55,19 +49,14 @@ export default {
       }
     })
 
-    let index:number = 0
+    let index: number = 0
     for (let i = 0; i < coffeeResultScore.length; i++) {
       if (coffeeResultScore[index] < coffeeResultScore[i]) index = i
     }
-    return index;
+    return index + 1
   },
-  resultProduct: (productScore:Array<number>) => {
-    // let mokapot:number = 0;
-    // let handdrip:number = 0;
-    // let capsule:number = 0;
-    // let waterdrip:number = 0;
+  resultProduct: (productScore: Array<number>) => {
     const productResultScore: Array<number> = [0, 0, 0, 0]
-    // ? mokapot, handdrip, capsule, waterdrip 순서입니다.
     productScore.forEach((data, idx) => {
       if (idx === 0 && data > 3) {
         productResultScore[0] -= data
@@ -75,12 +64,12 @@ export default {
         productResultScore[2] -= data * 2
         productResultScore[3] += data * 2
       } else if (idx === 0 && data < 4) {
-        productResultScore[0] += data /2
+        productResultScore[0] += data / 2
         productResultScore[1] -= data
         productResultScore[2] += data * 1.5
         productResultScore[3] -= data * 2
-      } else if (idx === 1 && data > 2 ) {
-        productResultScore[0] += data /2
+      } else if (idx === 1 && data > 2) {
+        productResultScore[0] += data / 2
         productResultScore[1] -= data
         productResultScore[2] += data * 2
         productResultScore[3] -= data * 2
@@ -122,10 +111,10 @@ export default {
       }
     })
 
-    let index:number = 0
+    let index: number = 0
     for (let i = 0; i < productResultScore.length; i++) {
       if (productResultScore[index] < productResultScore[i]) index = i
     }
-    return index;
-  }
+    return index + 6
+  },
 }

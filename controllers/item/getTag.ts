@@ -1,10 +1,5 @@
-import Tag from '@entity/Tag.entity'
-import TagItem from '@entity/TagItem.entity'
-import Item from '@entity/Item.entity'
 import { default as interfaces } from '@interface/index'
-import { default as token } from '@middleware/jwt'
 import { Response, Request } from 'express'
-import { createQueryBuilder, getRepository } from 'typeorm'
 
 const getTag = async (req: Request, res: Response) => {
   const authorization = String(req.headers.authorization)
@@ -13,7 +8,6 @@ const getTag = async (req: Request, res: Response) => {
       const itemType = String(req.query.itemType)
       const tagId = Number(req.query.tagId)
       const tagAndItemInfo = await interfaces.getTagAndItemInfo(tagId, itemType)
-      console.log(tagAndItemInfo!)
 
       const refined = tagAndItemInfo.map((el) => {
         return {
@@ -22,7 +16,6 @@ const getTag = async (req: Request, res: Response) => {
           type: el.item.type,
         }
       })
-      console.log(refined)
 
       res.status(200).send({
         tagId: tagAndItemInfo[0].tagId,
@@ -30,10 +23,10 @@ const getTag = async (req: Request, res: Response) => {
         tagItemList: refined,
       })
     } catch (err) {
-      res.send(400).send('error')
+      res.send(404).send('잘못된 정보가 입력되었습니다.')
     }
   } else {
-    res.send(401).send('Invalid token.')
+    res.send(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   }
 }
 
