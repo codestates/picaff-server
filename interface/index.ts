@@ -1,6 +1,7 @@
 import { getRepository, getConnection } from 'typeorm'
 import User from '@entity/User.entity'
 import TestResult from '@entity/TestResult.entity'
+import TagItem from '@entity/TagItem.entity'
 import Item from '@entity/Item.entity'
 import { tokenUser, coffeeItemInfo, productItemInfo } from './type'
 import Liked from '@entity/Liked.entity'
@@ -343,5 +344,18 @@ export default {
       await getRepository(TestResult).save(testResult)
     }
     return testResult
+  },
+
+  getTagAndItemInfo: async (tagId: number, type: string) => {
+    const tagAndItemInfo = await getRepository(TagItem)
+      .createQueryBuilder('tagItem')
+      .leftJoinAndSelect('tagItem.tag', 'tag')
+      .leftJoinAndSelect('tagItem.item', 'item')
+      .where('tag.id = :id', { id: tagId })
+      .andWhere('item.type = :type', { type: type })
+      .getMany()
+
+    console.log(tagAndItemInfo)
+    return tagAndItemInfo
   },
 }
