@@ -1,37 +1,49 @@
+import token from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
-import { default as token } from '@middleware/jwt'
+import { getRepository } from 'typeorm'
+import Item from '@entity/Item.entity'
 
 const getAllItems = async (req: Request, res: Response) => {
+  console.log(req)
   try {
-    if (req.query.type === undefined) {
-      return res.status(404).send('정확한 정보를 입력해 주세요')
+    if (!req.query.type) {
+      return res.status(404).send({ message: '잘못된 정보가 입력되었습니다.' })
     } else {
+      let type: string
+      if (req.query.type === 'coffee') type = 'coffee'
+      else if (req.query.type === 'product') type = 'product'
+      else type = ''
       if (req.headers.authorization) {
-        const authorization = String(req.headers.authorization)
-        console.log(authorization)
-        const accessToken = authorization!.split(' ')[1]
-        const data = token.verifyToken(accessToken)
-        const userId = data.id
-        const type = String(req.query.type)
-        const allItemInfo = await interfaces.getAllItemInfo(userId, type)
-        if (type === 'coffee') {
-          return res.status(200).send({ allCoffeeItemInfo: allItemInfo }) // 이렇게 할지 or allItemInfo 그대로 넣을지 의견 묻기.
-        } else if (type === 'product') {
-          return res.status(200).send({ allProductItemInfo: allItemInfo })
+        const accessToken = req.headers.authorization.split(' ')[1]
+        const verifyToken = token.verifyToken(accessToken)
+        const userInfo = await interfaces.getUserInfo(verifyToken.email)
+        if (verifyToken.id !== userInfo.id) {
+          return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
         }
+        const itemEntity = await getRepository(Item).find({ where: { type: type } })
+        if (!itemEntity) return res.status(403).send({ message: '정확한 정보를 입력해주세요.' })
+        const itemsInfo = await Promise.all(
+          itemEntity.map((data) => {
+            const itemInfo = interfaces.getItemInfo(data.id, verifyToken.id)
+            return itemInfo
+          })
+        )
+        return res.status(200).send(itemsInfo)
       } else {
-        const type = String(req.query.type)
-        const allItemInfo = await interfaces.getAllItemInfo(null, type)
-        if (type === 'coffee') {
-          return res.status(200).send({ allCoffeeItemInfo: allItemInfo })
-        } else if (type === 'product') {
-          return res.status(200).send({ allProductItemInfo: allItemInfo })
-        }
+        const itemEntity = await getRepository(Item).find({ where: { type: type } })
+        if (!itemEntity) return res.status(403).send({ message: '정확한 정보를 입력해주세요.' })
+        const itemsInfo = await Promise.all(
+          itemEntity.map((data) => {
+            const itemInfo = interfaces.getItemInfo(data.id, null)
+            return itemInfo
+          })
+        )
+        return res.status(200).send(itemsInfo)
       }
     }
   } catch (err) {
-    return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
+    return res.status(403).send({ message: '정확한 정보를 입력해 주세요.' })
   }
 }
 
