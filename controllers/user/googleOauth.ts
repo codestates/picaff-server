@@ -45,9 +45,12 @@ const googleOauth = async (req: Request, res: Response) => {
                 email: checkUser.email,
                 auth: {
                   accessToken: accessToken,
+                  refreshToken: refreshToken,
                 },
               })
-          } else throw error({ message: '정확한 정보를 입력해주세요' })
+          } else {
+            return res.status(404).send({ message: '유저 정보를 찾을 수 없습니다.' })
+          }
         } else {
           await interfaces.createUser(email, userName, password)
           const userInfo = await interfaces.getUserInfo(email)
@@ -72,14 +75,18 @@ const googleOauth = async (req: Request, res: Response) => {
               email: userInfo.email,
               auth: {
                 accessToken: accessToken,
+                refreshToken: refreshToken,
               },
             })
         }
       } else {
-        return res.status(401).send({ message: '권한이 없습니다.' })
+        return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
       }
+    } else {
+      return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
     }
   }
+
   verify().catch((err) => {
     return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   })

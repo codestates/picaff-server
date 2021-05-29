@@ -43,6 +43,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
             email: checkUser.email,
             auth: {
               accessToken: accessToken,
+              refreshToken: refreshToken,
             },
           })
       } else {
