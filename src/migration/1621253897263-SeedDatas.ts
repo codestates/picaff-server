@@ -1,6 +1,5 @@
 import { getRepository, MigrationInterface, QueryRunner } from 'typeorm'
 import { UserDataSeed } from '../seeds/user.seed'
-import { CategoryDataSeed } from '../seeds/category.seed'
 import { ItemDataSeed } from '../seeds/item.seed'
 import { CoffeeCharacterDataSeed } from '../seeds/coffeeCharacter.seed'
 import { ProductCharacterDataSeed } from '../seeds/productCharacter.seed'

@@ -1,19 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToOne,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import ProductCharacter from './ProductCharacter.entity'
 import CoffeeCharacter from './CoffeeCharacter.entity'
 import Liked from './Liked.entity'
 import TagItem from './TagItem.entity'
 import TestResult from './TestResult.entity'
-import Tag from './Tag.entity'
 
 @Entity()
 export default class Item {

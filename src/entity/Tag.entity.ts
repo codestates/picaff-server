@@ -1,6 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import TagItem from './TagItem.entity'
-import Item from './Item.entity'
 
 @Entity()
 export default class Tag {
