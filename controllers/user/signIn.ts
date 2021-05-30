@@ -1,6 +1,7 @@
 import token from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
+import crypt from '@middleware/bcrypt'
 
 const signIn = async (req: Request, res: Response) => {
   const { email, password } = req.body
@@ -11,8 +12,9 @@ const signIn = async (req: Request, res: Response) => {
   }
   try {
     const userInfo = await interfaces.getUserInfo(req.body.email)
-    const { id, email, userName } = userInfo
-    if (userInfo.password === req.body.password) {
+    const { id, email, userName, password } = userInfo
+    const isComparePassword = await crypt.comparePassword(req.body.password, password)
+    if (isComparePassword) {
       const accessToken = token.generateAccessToken(id, email, userName)
       const refreshToken = token.generateRefreshToken(id, email, userName)
       return res
