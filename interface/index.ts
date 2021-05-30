@@ -473,7 +473,6 @@ export default {
     } else {
       productResult = {}
     }
-
     return { coffeeResult: coffeeResult, productResult: productResult }
   },
 
