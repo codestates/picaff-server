@@ -1,6 +1,7 @@
 import token from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
+import crypt from '@middleware/bcrypt'
 
 const modification = async (req: Request, res: Response) => {
   if (!req.headers.authorization) {
@@ -11,12 +12,14 @@ const modification = async (req: Request, res: Response) => {
     const accessToken: string = req.headers.authorization.split(' ')[1]
     try {
       const verifyToken = token.verifyToken(accessToken)
+      console.log(verifyToken)
       if (newUserName && newUserName !== '') {
         const userInfo = await interfaces.editUserInfo('userName', newUserName, verifyToken.id)
         const { id, email, userName } = userInfo
         return res.status(202).send({ id: id, email: email, userName: userName })
       } else if (newPassword && newPassword !== '') {
-        const userInfo = await interfaces.editUserInfo('password', newPassword, verifyToken.id)
+        const hashPassword = await crypt.cryptPassword(newPassword)
+        const userInfo = await interfaces.editUserInfo('password', hashPassword, verifyToken.id)
         const { id, email, userName } = userInfo
         return res.status(202).send({ id: id, email: email, userName: userName })
       } else {
