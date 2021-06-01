@@ -8,5 +8,6 @@ router.get('/all', itemController.getAllItems)
 router.post('/sharing', itemController.sharing)
 router.post('/liked', itemController.addLiked)
 router.get('/tag', itemController.getTag)
+router.post('/crawling', itemController.crawling)
 
 export default router
