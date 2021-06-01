@@ -53,3 +53,11 @@ export type tag = {
   id: number
   tagName: string
 }
+
+export type itemCrawling = {
+  title: string
+  imageURL: string
+  price: number
+  seller: string
+  linkURL: string
+}

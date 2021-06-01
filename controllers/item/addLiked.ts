@@ -5,14 +5,14 @@ import 'dotenv/config'
 import Liked from '@entity/Liked.entity'
 
 const addLiked = async (req: Request, res: Response) => {
-  if (!req.query.itemId) {
+  if (!req.body.itemId) {
     return res.send(404).send({ message: '정확한 정보를 입력해 주세요.' })
   } else {
     try {
       if (req.headers.authorization !== undefined) {
         if (req.headers.authorization) {
           const authorization: string = req.headers.authorization
-          const itemId = Number(req.query.itemId)
+          const itemId = req.body.itemId
           const accessToken = authorization!.split(' ')[1]
           const data = token.verifyToken(accessToken)
           const { id } = data
