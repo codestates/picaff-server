@@ -3,6 +3,7 @@ import token from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { getConnection } from 'typeorm'
 import { default as interfaces } from '@interface/index'
+import crypt from '@middleware/bcrypt'
 
 const signOff = async (req: Request, res: Response) => {
   if (!req.headers.authorization) {
@@ -12,7 +13,9 @@ const signOff = async (req: Request, res: Response) => {
     try {
       const verifyToken = token.verifyToken(accessToken)
       const userInfo = await interfaces.getUserInfo(verifyToken.email)
-      if (req.body.password === userInfo.password) {
+      const { id, email, userName, password } = userInfo
+      const isComparePassword = await crypt.comparePassword(req.body.password, password)
+      if (isComparePassword) {
         await getConnection()
           .createQueryBuilder()
           .delete()
