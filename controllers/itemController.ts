@@ -1,4 +1,11 @@
-import { getItem, getAllItems, sharing, addLiked, getTag } from './item/itemHandler'
+import {
+  getItem,
+  getAllItems,
+  sharing,
+  addLiked,
+  getTag,
+  priceComparison,
+} from './item/itemHandler'
 
 export default {
   getItem,
@@ -6,4 +13,5 @@ export default {
   sharing,
   addLiked,
   getTag,
+  priceComparison,
 }
