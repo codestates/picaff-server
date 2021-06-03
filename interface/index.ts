@@ -175,17 +175,24 @@ export default {
               itemDetail,
               type,
               iso,
+              imageURL,
               productCharacterId,
               coffeeCharacterId,
               coffeeCharacter,
               tagItems,
             } = itemInfo
+            const itemDetails = itemDetail.split('/')
             const resultItemInfo: coffeeItemInfo = {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail: itemDetail,
+              itemDetail: 
+              {
+                title: itemDetails[0],
+                content: itemDetails.slice(1)
+              },
               type: type,
+              imageURL: imageURL,
               iso: iso,
               productCharacterId: productCharacterId,
               coffeeCharacterId: coffeeCharacterId,
@@ -229,18 +236,25 @@ export default {
               itemPrice,
               itemDetail,
               type,
+              imageURL,
               iso,
               productCharacterId,
               coffeeCharacterId,
               productCharacter,
               tagItems,
             } = itemInfo
+            const itemDetails = itemDetail.split('/')
             const resultItemInfo: productItemInfo = {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail: itemDetail,
+              itemDetail:
+              {
+                title: itemDetails[0],
+                content: itemDetails.slice(1)
+              },
               type: type,
+              imageURL: imageURL,
               iso: iso,
               productCharacterId: productCharacterId,
               coffeeCharacterId: coffeeCharacterId,
@@ -279,18 +293,25 @@ export default {
           itemPrice,
           itemDetail,
           type,
+          imageURL,
           iso,
           productCharacterId,
           coffeeCharacterId,
           coffeeCharacter,
           tagItems,
         } = data
+        const itemDetails = itemDetail.split('/')
         let itemInfo: coffeeItemInfo = {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail: itemDetail,
+          itemDetail:
+          {
+            title: itemDetails[0],
+            content: itemDetails.slice(1)
+          },
           type: type,
+          imageURL: imageURL,
           iso: iso,
           productCharacterId: productCharacterId,
           coffeeCharacterId: coffeeCharacterId,
@@ -320,18 +341,25 @@ export default {
           itemPrice,
           itemDetail,
           type,
+          imageURL,
           iso,
           productCharacterId,
           coffeeCharacterId,
           productCharacter,
           tagItems,
         } = data
+        const itemDetails = itemDetail.split('/')
         let itemInfo: productItemInfo = {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail: itemDetail,
+          itemDetail:
+          {
+            title: itemDetails[0],
+            content: itemDetails.slice(1)
+          },
           type: type,
+          imageURL: imageURL,
           iso: iso,
           productCharacterId: productCharacterId,
           coffeeCharacterId: coffeeCharacterId,
@@ -395,18 +423,25 @@ export default {
         itemPrice,
         itemDetail,
         type,
+        imageURL,
         iso,
         productCharacterId,
         coffeeCharacterId,
         coffeeCharacter,
         tagItems,
       } = coffeeInfo
+      const itemDetails = itemDetail.split('/')
       const resultItemInfo: coffeeItemInfo = {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail: itemDetail,
+        itemDetail:
+        {
+          title: itemDetails[0],
+          content: itemDetails.slice(1)
+        },
         type: type,
+        imageURL: imageURL,
         iso: iso,
         productCharacterId: productCharacterId,
         coffeeCharacterId: coffeeCharacterId,
@@ -448,18 +483,25 @@ export default {
         itemPrice,
         itemDetail,
         type,
+        imageURL,
         iso,
         productCharacterId,
         coffeeCharacterId,
         productCharacter,
         tagItems,
       } = productInfo
+      const itemDetails = itemDetail.split('/')
       const resultItemInfo: productItemInfo = {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail: itemDetail,
+        itemDetail:
+        {
+          title: itemDetails[0],
+          content: itemDetails.slice(1)
+        },
         type: type,
+        imageURL: imageURL,
         iso: iso,
         productCharacterId: productCharacterId,
         coffeeCharacterId: coffeeCharacterId,
