@@ -26,8 +26,9 @@ export type coffeeItemInfo = {
   id: number
   itemName: string
   itemPrice: number
-  itemDetail: string
+  itemDetail: itemDetail
   type: string
+  imageURL: string
   iso: string | null
   productCharacterId: number | null
   coffeeCharacterId: number | null
@@ -39,8 +40,9 @@ export type productItemInfo = {
   id: number
   itemName: string
   itemPrice: number
-  itemDetail: string
+  itemDetail: itemDetail
   type: string
+  imageURL: string
   iso: string | null
   productCharacterId: number | null
   coffeeCharacterId: number | null
@@ -48,7 +50,10 @@ export type productItemInfo = {
   tag: Array<tag>
   isLiked: boolean
 }
-
+export type itemDetail = {
+  title: string
+  content: Array<string>
+}
 export type tag = {
   id: number
   tagName: string

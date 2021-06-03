@@ -11,6 +11,9 @@ const userInfo = async (req: Request, res: Response) => {
     try {
       const verifyToken = token.verifyToken(accessToken)
       const userInfo = await interfaces.getUserInfo(verifyToken.email)
+      if(verifyToken.id !== userInfo.id) {
+        return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
+      }
       const testInfo = await interfaces.getTestResultInfo(verifyToken.id, verifyToken, null, false)
 
       const likedCoffeeList = await interfaces.getLiked(verifyToken.id, 'coffee')
