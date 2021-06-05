@@ -5,8 +5,6 @@ import { getConnection } from 'typeorm'
 import { default as interfaces } from '@interface/index'
 
 const signOff = async (req: Request, res: Response) => {
-  console.log(req.headers.authorization)
-  console.log(req.body)
   if (!req.headers.authorization) {
     return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   } else {

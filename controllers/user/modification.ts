@@ -4,10 +4,6 @@ import { default as interfaces } from '@interface/index'
 import crypt from '@middleware/bcrypt'
 
 const modification = async (req: Request, res: Response) => {
-  console.log(req.headers)
-  console.log(req.body)
-  console.log(req.headers.authorization)
-  console.log(req.body.userName)
   if (!req.headers.authorization) {
     return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   } else {
@@ -15,10 +11,8 @@ const modification = async (req: Request, res: Response) => {
     const newPassword: string = req.body.password
     const accessToken: string = req.headers.authorization.split(' ')[1]
     try {
-      console.log('1, newUserName:::::::::::', newUserName)
       const verifyToken = token.verifyToken(accessToken)
       console.log(verifyToken)
-      console.log('2, newUserName:::::::::::', newUserName)
       if (newUserName && newUserName !== '') {
         const userInfo = await interfaces.editUserInfo('userName', newUserName, verifyToken.id)
         const { id, email, userName } = userInfo

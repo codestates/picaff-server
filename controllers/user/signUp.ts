@@ -25,7 +25,6 @@ const signUp = async (req: Request, res: Response) => {
       }
     }
   } catch (err) {
-    console.log('에러가 났나요?')
     return res.status(404).send({ message: '정확한 정보를 입력해 주십시오.' })
   }
 }
