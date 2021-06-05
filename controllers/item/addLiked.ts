@@ -36,7 +36,7 @@ const addLiked = async (req: Request, res: Response) => {
             liked.itemId = itemId
             await getRepository(Liked).save(liked)
 
-            return res.status(201).send(liked)
+            return res.status(200).send(liked)
           }
         } else {
           return res.status(401).send('로그인상태와 엑세스토큰 확인이 필요합니다.')
