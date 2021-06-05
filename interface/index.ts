@@ -104,6 +104,13 @@ export default {
     user.email = email
     user.userName = userName
     user.password = password
+    if (user.email.includes('gmail.com')) {
+      user.type = 'google'
+    } else if (user.email.includes('KaKaoUser@')) {
+      user.type = 'kakao'
+    } else {
+      user.type = 'normal'
+    }
     await getRepository(User).save(user)
     return user
   },
@@ -186,10 +193,9 @@ export default {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail: 
-              {
+              itemDetail: {
                 title: itemDetails[0],
-                content: itemDetails.slice(1)
+                content: itemDetails.slice(1),
               },
               type: type,
               imageURL: imageURL,
@@ -248,10 +254,9 @@ export default {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail:
-              {
+              itemDetail: {
                 title: itemDetails[0],
-                content: itemDetails.slice(1)
+                content: itemDetails.slice(1),
               },
               type: type,
               imageURL: imageURL,
@@ -305,10 +310,9 @@ export default {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail:
-          {
+          itemDetail: {
             title: itemDetails[0],
-            content: itemDetails.slice(1)
+            content: itemDetails.slice(1),
           },
           type: type,
           imageURL: imageURL,
@@ -353,10 +357,9 @@ export default {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail:
-          {
+          itemDetail: {
             title: itemDetails[0],
-            content: itemDetails.slice(1)
+            content: itemDetails.slice(1),
           },
           type: type,
           imageURL: imageURL,
@@ -435,10 +438,9 @@ export default {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail:
-        {
+        itemDetail: {
           title: itemDetails[0],
-          content: itemDetails.slice(1)
+          content: itemDetails.slice(1),
         },
         type: type,
         imageURL: imageURL,
@@ -495,10 +497,9 @@ export default {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail:
-        {
+        itemDetail: {
           title: itemDetails[0],
-          content: itemDetails.slice(1)
+          content: itemDetails.slice(1),
         },
         type: type,
         imageURL: imageURL,

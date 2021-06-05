@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
 import crypt from '@middleware/bcrypt'
-
+// 이메일로 유저 체크 >  //
 const signUp = async (req: Request, res: Response) => {
   try {
     const isSignUpUser = await interfaces.isCheckedUser(req.body.email)

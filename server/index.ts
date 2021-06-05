@@ -5,13 +5,6 @@ import https from 'https'
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000
 
-// app.set('port', process.env.EX_PORT)
-// app
-//   .listen(app.get('port'), () => {
-//     console.log(`App is listening on PORT ${app.get('port')} `)
-//   })
-//   .on('error', (err) => console.error('failed to connect with server')) // 서버 에러시 코드
-
 if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
   const privateKey = fs.readFileSync(__dirname + '/key.pem', 'utf8')
   const certificate = fs.readFileSync(__dirname + '/cert.pem', 'utf8')

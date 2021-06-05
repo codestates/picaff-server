@@ -3,7 +3,6 @@ import token from '@middleware/jwt'
 import { Response, Request } from 'express'
 import { getConnection } from 'typeorm'
 import { default as interfaces } from '@interface/index'
-import crypt from '@middleware/bcrypt'
 
 const signOff = async (req: Request, res: Response) => {
   console.log(req.headers.authorization)
@@ -12,21 +11,16 @@ const signOff = async (req: Request, res: Response) => {
     return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   } else {
     const accessToken = req.headers.authorization.split(' ')[1]
+
     try {
       const verifyToken = token.verifyToken(accessToken)
       const userInfo = await interfaces.getUserInfo(verifyToken.email)
-      const { id, email, userName, password } = userInfo
-      const isComparePassword = await crypt.comparePassword(req.body.password, password)
-      if (isComparePassword) {
-        await getConnection()
-          .createQueryBuilder()
-          .delete()
-          .from(User)
-          .where({ id: userInfo.id })
-          .execute()
-        return res.status(200).cookie('refreshToken', '').send()
+      if (userInfo.type !== 'normal') {
+        return res.status(401).send({ message: 'Oauth 유저는 회원탈퇴가 불가능합니다.' })
       } else {
-        return res.status(403).send({ message: '정확한 비밀번호를 입력해주세요' })
+        const { id } = userInfo
+        await getConnection().createQueryBuilder().delete().from(User).where({ id: id }).execute()
+        return res.status(200).cookie('refreshToken', '').send()
       }
     } catch (err) {
       if (err.name) {

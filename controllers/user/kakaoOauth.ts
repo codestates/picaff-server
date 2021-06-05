@@ -21,7 +21,7 @@ const kakaoOauth = async (req: Request, res: Response) => {
     const properties: kakaoProperties = verifyTokenInfo.data.properties
 
     if (verifyTokenInfo.status === 200) {
-      const checkUser = await interfaces.getKakaoUserInfo('kakaoUser' + id)
+      const checkUser = await interfaces.getKakaoUserInfo('KaKaoUser@' + id)
       if (checkUser) {
         const accessToken = token.generateAccessToken(
           checkUser.id,
@@ -46,8 +46,8 @@ const kakaoOauth = async (req: Request, res: Response) => {
             },
           })
       } else {
-        await interfaces.createUser('kakaoUser' + `${id}`, properties.nickname, 'kakaoOauth')
-        const oauthUserInfo = await interfaces.getKakaoUserInfo('kakaoUser' + id)
+        await interfaces.createUser('KaKaoUser@' + `${id}`, properties.nickname, 'kakaoOauth')
+        const oauthUserInfo = await interfaces.getKakaoUserInfo('KaKaoUser@' + id)
         if (oauthUserInfo !== undefined) {
           const accessToken = token.generateAccessToken(
             oauthUserInfo.id,

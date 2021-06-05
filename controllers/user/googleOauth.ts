@@ -22,8 +22,6 @@ const googleOauth = async (req: Request, res: Response) => {
       if (payload.email_verified) {
         const checkUser = await interfaces.getGoogleUserInfo(email)
         if (checkUser) {
-          // const checkPassword = await (checkUser.password === password)
-          // if (checkPassword) {
           const accessToken = token.generateAccessToken(
             checkUser.id,
             checkUser.email,
@@ -46,10 +44,6 @@ const googleOauth = async (req: Request, res: Response) => {
                 refreshToken: refreshToken,
               },
             })
-          // }
-          // else {
-          //   return res.status(404).send({ message: '유저 정보를 찾을 수 없습니다.' })
-          // }
         } else {
           await interfaces.createUser(email, userName, password)
           const userInfo = await interfaces.getUserInfo(email)
