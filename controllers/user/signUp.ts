@@ -16,7 +16,6 @@ const signUp = async (req: Request, res: Response) => {
         const user = await interfaces.createUser(req.body.email, req.body.userName, password)
         const userInfo = await interfaces.getUserInfo(user.email)
         const { id, email, userName } = userInfo
-        console.log(userInfo)
         res.status(201).send({
           id: id,
           email: email,

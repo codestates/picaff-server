@@ -12,7 +12,6 @@ const modification = async (req: Request, res: Response) => {
     const accessToken: string = req.headers.authorization.split(' ')[1]
     try {
       const verifyToken = token.verifyToken(accessToken)
-      console.log(verifyToken)
       if (newUserName && newUserName !== '') {
         const userInfo = await interfaces.editUserInfo('userName', newUserName, verifyToken.id)
         const { id, email, userName } = userInfo
@@ -21,7 +20,6 @@ const modification = async (req: Request, res: Response) => {
         const hashPassword = await crypt.cryptPassword(newPassword)
         const userInfo = await interfaces.editUserInfo('password', hashPassword, verifyToken.id)
         const { id, email, userName } = userInfo
-        console.log(userInfo)
         return res.status(202).send({ id: id, email: email, userName: userName })
       } else {
         return res.status(403).send({ message: '정확한 정보를 입력해주세요' })
