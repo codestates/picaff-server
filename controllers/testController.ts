@@ -5,7 +5,6 @@ import { default as test } from '@interface/test'
 
 export default {
   post: async (req: Request, res: Response) => {
-    console.log('just got the req!', req.headers)
     try {
       if (!req.body.score) return res.status(404).send({ message: '설문조사를 다시 진행해주세요' })
       const { score } = req.body
