@@ -99,18 +99,13 @@ export default {
     }
   },
 
-  createUser: async (email: string, userName: string, password: string) => {
+  createUser: async (email: string, userName: string, password: string, type: string) => {
     const user: User = await new User()
     user.email = email
     user.userName = userName
     user.password = password
-    if (user.email.includes('gmail.com')) {
-      user.type = 'google'
-    } else if (user.email.includes('KaKaoUser@')) {
-      user.type = 'kakao'
-    } else {
-      user.type = 'normal'
-    }
+    user.type = type
+
     await getRepository(User).save(user)
     return user
   },

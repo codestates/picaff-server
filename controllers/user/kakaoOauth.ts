@@ -46,7 +46,13 @@ const kakaoOauth = async (req: Request, res: Response) => {
             },
           })
       } else {
-        await interfaces.createUser('KaKaoUser@' + `${id}`, properties.nickname, 'kakaoOauth')
+        const kakaoOauthIdType = 'Oauth' // id type 추가
+        await interfaces.createUser(
+          'KaKaoUser@' + `${id}`,
+          properties.nickname,
+          'kakaoOauth',
+          kakaoOauthIdType // id type 추가
+        )
         const oauthUserInfo = await interfaces.getKakaoUserInfo('KaKaoUser@' + id)
         if (oauthUserInfo !== undefined) {
           const accessToken = token.generateAccessToken(
