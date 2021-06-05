@@ -26,17 +26,19 @@ const googleOauth = async (req: Request, res: Response) => {
         const googleOauthIdType = 'Oauth'
 
         if (checkUser) {
+          const userInfo = await interfaces.getUserInfo(email)
           // 우리 db에 가입자가있을경우..
           // 방법 1.
-          await getConnection()
-            .createQueryBuilder()
-            .update(User)
-            .set({ type: googleOauthIdType })
-            .where({ email: email })
-            .execute() // 기존 gmail 유저정보를 그대로 받아다, type만 id update 하는 방법 >
-          // 이렇게 되면 기존 일반 gmail 이용자 아이디 자체가 사라지고, 앞으로 Oauth 로그인만 해야 함.
-
-          const userInfo = await interfaces.getUserInfo(email)
+          if (userInfo.type !== googleOauthIdType) {
+            // (이미 타입이 제대로 박혀있지 않을 경우에만)
+            await getConnection()
+              .createQueryBuilder()
+              .update(User)
+              .set({ type: googleOauthIdType })
+              .where({ email: email })
+              .execute() // 기존 gmail 유저정보를 그대로 받아다, type만 id update 하는 방법 >
+            // 이렇게 되면 기존 일반 gmail 이용자 아이디 자체가 사라지고, 앞으로 Oauth 로그인만 해야 함.
+          }
           const accessToken = token.generateAccessToken(
             userInfo.id,
             userInfo.email,
