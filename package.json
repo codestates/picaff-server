@@ -1,7 +1,6 @@
 {
   "name": "picaff-server",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register server/index.ts",
@@ -49,5 +48,6 @@
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.2.4"
-  }
+  },
+  "description": ""
 }

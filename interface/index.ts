@@ -99,11 +99,13 @@ export default {
     }
   },
 
-  createUser: async (email: string, userName: string, password: string) => {
+  createUser: async (email: string, userName: string, password: string, type: string) => {
     const user: User = await new User()
     user.email = email
     user.userName = userName
     user.password = password
+    user.type = type
+
     await getRepository(User).save(user)
     return user
   },
@@ -186,10 +188,9 @@ export default {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail: 
-              {
+              itemDetail: {
                 title: itemDetails[0],
-                content: itemDetails.slice(1)
+                content: itemDetails.slice(1),
               },
               type: type,
               imageURL: imageURL,
@@ -248,10 +249,9 @@ export default {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail:
-              {
+              itemDetail: {
                 title: itemDetails[0],
-                content: itemDetails.slice(1)
+                content: itemDetails.slice(1),
               },
               type: type,
               imageURL: imageURL,
@@ -305,10 +305,9 @@ export default {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail:
-          {
+          itemDetail: {
             title: itemDetails[0],
-            content: itemDetails.slice(1)
+            content: itemDetails.slice(1),
           },
           type: type,
           imageURL: imageURL,
@@ -353,10 +352,9 @@ export default {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail:
-          {
+          itemDetail: {
             title: itemDetails[0],
-            content: itemDetails.slice(1)
+            content: itemDetails.slice(1),
           },
           type: type,
           imageURL: imageURL,
@@ -435,10 +433,9 @@ export default {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail:
-        {
+        itemDetail: {
           title: itemDetails[0],
-          content: itemDetails.slice(1)
+          content: itemDetails.slice(1),
         },
         type: type,
         imageURL: imageURL,
@@ -495,10 +492,9 @@ export default {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail:
-        {
+        itemDetail: {
           title: itemDetails[0],
-          content: itemDetails.slice(1)
+          content: itemDetails.slice(1),
         },
         type: type,
         imageURL: imageURL,
