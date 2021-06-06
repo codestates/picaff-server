@@ -6,7 +6,6 @@ import { kakaoProperties } from '@interface/type'
 
 const kakaoOauth = async (req: Request, res: Response) => {
   const access_token: string = req.body.access_token
-
   try {
     const verifyTokenInfo = await axios({
       method: 'POST',
@@ -16,7 +15,6 @@ const kakaoOauth = async (req: Request, res: Response) => {
         'Authorization': `Bearer ${access_token}`,
       },
     })
-
     const id: string = verifyTokenInfo.data.id
     const properties: kakaoProperties = verifyTokenInfo.data.properties
 

@@ -58,8 +58,6 @@ const googleOauth = async (req: Request, res: Response) => {
           if (typeof userInfo === 'undefined') {
             return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
           }
-          // const userInfo = await interfaces.getUserInfo(email)
-
           const accessToken = token.generateAccessToken(
             userInfo.id,
             userInfo.email,
@@ -72,7 +70,6 @@ const googleOauth = async (req: Request, res: Response) => {
             userInfo.userName,
             'OAuth'
           )
-
           return res
             .status(201)
             .cookie('refreshToken', refreshToken, { httpOnly: true })
@@ -93,7 +90,6 @@ const googleOauth = async (req: Request, res: Response) => {
       return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
     }
   }
-
   verify().catch((err) => {
     return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
   })

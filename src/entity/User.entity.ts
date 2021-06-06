@@ -18,6 +18,9 @@ export default class User {
   email!: string
 
   @Column()
+  type!: string
+
+  @Column()
   password!: string
 
   @Column()
