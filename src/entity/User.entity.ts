@@ -26,6 +26,9 @@ export default class User {
   @Column()
   userName!: string
 
+  @Column()
+  type!: string
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date
 

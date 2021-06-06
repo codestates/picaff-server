@@ -11,7 +11,6 @@ const addTest = async (req: Request, res: Response) => {
       const verifyToken = token.verifyToken(accessToken)
       const testInfo = await interfaces.getTestResultInfo(
         verifyToken.id,
-        verifyToken,
         req.body.testId,
         true
       )

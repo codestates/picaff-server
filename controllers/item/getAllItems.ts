@@ -16,7 +16,7 @@ const getAllItems = async (req: Request, res: Response) => {
       if (req.headers.authorization) {
         const accessToken = req.headers.authorization.split(' ')[1]
         const verifyToken = token.verifyToken(accessToken)
-        const userInfo = await interfaces.getUserInfo(verifyToken.email)
+        const userInfo = await interfaces.getUserInfo(verifyToken.email, verifyToken.type)
         if (verifyToken.id !== userInfo.id) {
           return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
         }

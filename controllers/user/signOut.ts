@@ -9,7 +9,7 @@ const signOut = async (req: Request, res: Response) => {
     const accessToken = req.headers.authorization.split(' ')[1]
     try {
       const verifyToken = token.verifyToken(accessToken)
-      const userInfo = await interfaces.getUserInfo(verifyToken.email)
+      const userInfo = await interfaces.getUserInfo(verifyToken.email, verifyToken.type)
       if (verifyToken.id === userInfo.id) {
         return res.status(200).cookie('refreshToken', '').send()
       }
