@@ -17,9 +17,9 @@ export default {
     }
   },
 
-  getUserInfo: async (target: string) => {
+  getUserInfo: async (email: string, type: string) => {
     const userEntity = getRepository(User)
-    const userInfo = await userEntity.findOne({ where: { email: target } })
+    const userInfo = await userEntity.findOne({ where: { email: email, type: type } })
     if (typeof userInfo === 'undefined') {
       throw new Error('잘못된 회원 정보입니다.')
     } else {
@@ -58,7 +58,6 @@ export default {
 
   getTestResultInfo: async (
     userId: number,
-    token: tokenUser,
     testId: number | null,
     isNull: boolean
   ) => {
@@ -99,11 +98,12 @@ export default {
     }
   },
 
-  createUser: async (email: string, userName: string, password: string) => {
+  createUser: async (email: string, userName: string, password: string, type: string) => {
     const user: User = await new User()
     user.email = email
     user.userName = userName
     user.password = password
+    user.type = type
     await getRepository(User).save(user)
     return user
   },
@@ -114,13 +114,14 @@ export default {
     user.email = changeEmailType
     user.userName = userName
     user.password = password
+    user.type = 'OAuth'
     await getRepository(User).save(user)
     return user
   },
 
   getKakaoUserInfo: async (target: string) => {
     const userEntity = getRepository(User)
-    const userInfo = await userEntity.findOne({ where: { email: target } })
+    const userInfo = await userEntity.findOne({ where: { email: target, type: 'OAuth' } })
     if (typeof userInfo === 'undefined') {
       return undefined
     } else {
@@ -130,7 +131,7 @@ export default {
 
   getGoogleUserInfo: async (target: string) => {
     const userEntity = getRepository(User)
-    const userInfo = await userEntity.findOne({ where: { email: target } })
+    const userInfo = await userEntity.findOne({ where: { email: target, type: 'OAuth' } })
     if (typeof userInfo === 'undefined') {
       return undefined
     } else {
@@ -186,10 +187,9 @@ export default {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail: 
-              {
+              itemDetail: {
                 title: itemDetails[0],
-                content: itemDetails.slice(1)
+                content: itemDetails.slice(1),
               },
               type: type,
               imageURL: imageURL,
@@ -248,10 +248,9 @@ export default {
               id: id,
               itemName: itemName,
               itemPrice: itemPrice,
-              itemDetail:
-              {
+              itemDetail: {
                 title: itemDetails[0],
-                content: itemDetails.slice(1)
+                content: itemDetails.slice(1),
               },
               type: type,
               imageURL: imageURL,
@@ -305,10 +304,9 @@ export default {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail:
-          {
+          itemDetail: {
             title: itemDetails[0],
-            content: itemDetails.slice(1)
+            content: itemDetails.slice(1),
           },
           type: type,
           imageURL: imageURL,
@@ -353,10 +351,9 @@ export default {
           id: id,
           itemName: itemName,
           itemPrice: itemPrice,
-          itemDetail:
-          {
+          itemDetail: {
             title: itemDetails[0],
-            content: itemDetails.slice(1)
+            content: itemDetails.slice(1),
           },
           type: type,
           imageURL: imageURL,
@@ -435,10 +432,9 @@ export default {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail:
-        {
+        itemDetail: {
           title: itemDetails[0],
-          content: itemDetails.slice(1)
+          content: itemDetails.slice(1),
         },
         type: type,
         imageURL: imageURL,
@@ -495,10 +491,9 @@ export default {
         id: id,
         itemName: itemName,
         itemPrice: itemPrice,
-        itemDetail:
-        {
+        itemDetail: {
           title: itemDetails[0],
-          content: itemDetails.slice(1)
+          content: itemDetails.slice(1),
         },
         type: type,
         imageURL: imageURL,
