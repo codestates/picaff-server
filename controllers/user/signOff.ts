@@ -12,9 +12,11 @@ const signOff = async (req: Request, res: Response) => {
     const accessToken = req.headers.authorization.split(' ')[1]
     try {
       const verifyToken = token.verifyToken(accessToken)
-      const userInfo = await interfaces.getUserInfo(verifyToken.email)
-      const { id, email, userName, password } = userInfo
-      const isComparePassword = await crypt.comparePassword(req.body.password, password)
+      const userInfo = await interfaces.getUserInfo(verifyToken.email, verifyToken.type)
+      if (userInfo.type === 'OAuth') {
+        return res.status(403).send({ message: 'OAuth유저는 탈퇴가 불가능합니다.' })
+      }
+      const isComparePassword = await crypt.comparePassword(req.body.password, userInfo.password)
       if (isComparePassword) {
         await getConnection()
           .createQueryBuilder()

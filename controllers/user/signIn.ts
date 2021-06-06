@@ -11,12 +11,12 @@ const signIn = async (req: Request, res: Response) => {
     return res.status(403).send({ message: '아이디와 비밀번호를 확인해주세요.' })
   }
   try {
-    const userInfo = await interfaces.getUserInfo(req.body.email)
+    const userInfo = await interfaces.getUserInfo(req.body.email, 'normal')
     const { id, email, userName, password } = userInfo
     const isComparePassword = await crypt.comparePassword(req.body.password, password)
     if (isComparePassword) {
-      const accessToken = token.generateAccessToken(id, email, userName)
-      const refreshToken = token.generateRefreshToken(id, email, userName)
+      const accessToken = token.generateAccessToken(id, email, userName, 'normal')
+      const refreshToken = token.generateRefreshToken(id, email, userName, 'normal')
       return res
         .status(200)
         .cookie('refreshToken', refreshToken, { httpOnly: true })

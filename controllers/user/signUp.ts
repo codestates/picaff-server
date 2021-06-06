@@ -13,13 +13,19 @@ const signUp = async (req: Request, res: Response) => {
       } else {
         const password = await crypt.cryptPassword(req.body.password)
         if (!password) return res.status(404).send({ message: '정확한 정보를 입력해 주십시오.' })
-        const user = await interfaces.createUser(req.body.email, req.body.userName, password)
-        const userInfo = await interfaces.getUserInfo(user.email)
-        const { id, email, userName } = userInfo
+        const user = await interfaces.createUser(
+          req.body.email,
+          req.body.userName,
+          password,
+          'normal'
+        )
+        const userInfo = await interfaces.getUserInfo(user.email, user.type)
+        const { id, email, userName, type } = userInfo
         res.status(201).send({
           id: id,
           email: email,
           userName: userName,
+          type: type,
         })
       }
     }

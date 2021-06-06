@@ -12,7 +12,6 @@ const modification = async (req: Request, res: Response) => {
     const accessToken: string = req.headers.authorization.split(' ')[1]
     try {
       const verifyToken = token.verifyToken(accessToken)
-      console.log(verifyToken)
       if (newUserName && newUserName !== '') {
         const userInfo = await interfaces.editUserInfo('userName', newUserName, verifyToken.id)
         const { id, email, userName } = userInfo
@@ -31,7 +30,7 @@ const modification = async (req: Request, res: Response) => {
         return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
       }
       /** 토큰으로 찾아낸 userId에 해당하는 유저가 데이터베이스에 존재하지 않을때 **/
-      return res.status(404).send({ message: "회원 정보가 일치하지 않습니다." })
+      return res.status(404).send({ message: '회원 정보가 일치하지 않습니다.' })
     }
   }
 }

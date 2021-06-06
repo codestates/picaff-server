@@ -26,12 +26,14 @@ const kakaoOauth = async (req: Request, res: Response) => {
         const accessToken = token.generateAccessToken(
           checkUser.id,
           checkUser.email,
-          checkUser.userName
+          checkUser.userName,
+          'OAuth'
         )
         const refreshToken = token.generateRefreshToken(
           checkUser.id,
           checkUser.email,
-          checkUser.userName
+          checkUser.userName,
+          'OAuth'
         )
         return res
           .status(200)
@@ -46,18 +48,25 @@ const kakaoOauth = async (req: Request, res: Response) => {
             },
           })
       } else {
-        await interfaces.createUser('kakaoUser' + `${id}`, properties.nickname, 'kakaoOauth')
+        await interfaces.createUser(
+          'kakaoUser' + `${id}`,
+          properties.nickname,
+          'kakaoOauth',
+          'OAuth'
+        )
         const oauthUserInfo = await interfaces.getKakaoUserInfo('kakaoUser' + id)
         if (oauthUserInfo !== undefined) {
           const accessToken = token.generateAccessToken(
             oauthUserInfo.id,
             oauthUserInfo.email,
-            oauthUserInfo.userName
+            oauthUserInfo.userName,
+            'OAuth'
           )
           const refreshToken = token.generateRefreshToken(
             oauthUserInfo.id,
             oauthUserInfo.email,
-            oauthUserInfo.userName
+            oauthUserInfo.userName,
+            'OAuth'
           )
           return res
             .status(201)

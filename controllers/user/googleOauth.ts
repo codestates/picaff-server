@@ -3,6 +3,8 @@ import 'dotenv/config'
 import { Request, Response } from 'express'
 import { LoginTicket, OAuth2Client } from 'google-auth-library'
 import { default as interfaces } from '@interface/index'
+import { getRepository } from 'typeorm'
+import User from '@entity/User.entity'
 
 const googleOauth = async (req: Request, res: Response) => {
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
@@ -25,12 +27,14 @@ const googleOauth = async (req: Request, res: Response) => {
           const accessToken = token.generateAccessToken(
             checkUser.id,
             checkUser.email,
-            checkUser.userName
+            checkUser.userName,
+            'OAuth'
           )
           const refreshToken = token.generateRefreshToken(
             checkUser.id,
             checkUser.email,
-            checkUser.userName
+            checkUser.userName,
+            'OAuth'
           )
           return res
             .status(200)
@@ -44,20 +48,29 @@ const googleOauth = async (req: Request, res: Response) => {
                 refreshToken: refreshToken,
               },
             })
-
         } else {
-          await interfaces.createUser(email, userName, password)
-          const userInfo = await interfaces.getUserInfo(email)
+          await interfaces.createUser(email, userName, password, 'OAuth')
+          const userInfo = await getRepository(User)
+            .createQueryBuilder('user')
+            .where('user.email = :email', { email: email })
+            .andWhere('user.type = :type', { type: 'OAuth' })
+            .getOne()
+          if (typeof userInfo === 'undefined') {
+            return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
+          }
+          // const userInfo = await interfaces.getUserInfo(email)
 
           const accessToken = token.generateAccessToken(
             userInfo.id,
             userInfo.email,
-            userInfo.userName
+            userInfo.userName,
+            'OAuth'
           )
           const refreshToken = token.generateRefreshToken(
             userInfo.id,
             userInfo.email,
-            userInfo.userName
+            userInfo.userName,
+            'OAuth'
           )
 
           return res

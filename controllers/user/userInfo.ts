@@ -10,21 +10,21 @@ const userInfo = async (req: Request, res: Response) => {
     const accessToken = req.headers.authorization.split(' ')[1]
     try {
       const verifyToken = token.verifyToken(accessToken)
-      const userInfo = await interfaces.getUserInfo(verifyToken.email)
-      if(verifyToken.id !== userInfo.id) {
+      const userInfo = await interfaces.getUserInfo(verifyToken.email, verifyToken.type)
+      if (verifyToken.id !== userInfo.id) {
         return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
       }
-      const testInfo = await interfaces.getTestResultInfo(verifyToken.id, verifyToken, null, false)
-
-      const likedCoffeeList = await interfaces.getLiked(verifyToken.id, 'coffee')
-      const likedProductList = await interfaces.getLiked(verifyToken.id, 'product')
+      const testInfo = await interfaces.getTestResultInfo(userInfo.id, null, false)
+      const likedCoffeeList = await interfaces.getLiked(userInfo.id, 'coffee')
+      const likedProductList = await interfaces.getLiked(userInfo.id, 'product')
       if (typeof testInfo === 'string') {
         return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
       }
       const userData: userInfo = {
-        id: verifyToken.id,
-        userName: verifyToken.userName,
-        email: verifyToken.email,
+        id: userInfo.id,
+        userName: userInfo.userName,
+        email: userInfo.email,
+        type: userInfo.type,
       }
       const testResult = await Promise.all(
         testInfo.map(async (data) => {

@@ -17,15 +17,13 @@ export default {
       const coffeeIndex = test.resultCoffee(coffeeScore)
       const productIndex = test.resultProduct(productScore)
       const isLogin = req.headers.authorization
-      if (isLogin === 'null') {
-        const testResultInfo = await interfaces.createTestInfo(null, coffeeIndex, productIndex)
-        const coffeeResult = await interfaces.getItemInfo(coffeeIndex, null)
-        const productResult = await interfaces.getItemInfo(productIndex, null)
-        return res.status(200).send({ testResultInfo, coffeeResult, productResult })
-      } else if (typeof isLogin === 'string') {
+      if (typeof isLogin === 'string' && isLogin !== 'null') {
         const accessToken = isLogin.split(' ')[1]
         const verifyToken = jwt.verifyToken(accessToken)
-        const userInfo = await interfaces.getUserInfo(verifyToken.email)
+        const userInfo = await interfaces.getUserInfo(verifyToken.email, verifyToken.type)
+        if (typeof userInfo === 'undefined') {
+          return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
+        }
         if (verifyToken.id !== userInfo.id) {
           return res.status(401).send({ message: '로그인상태와 엑세스토큰 확인이 필요합니다.' })
         }
@@ -38,7 +36,10 @@ export default {
         const productResult = await interfaces.getItemInfo(productIndex, userInfo.id)
         return res.status(200).send({ testResultInfo, coffeeResult, productResult })
       } else {
-        return res.status(404).send({ message: '설문조사를 다시 진행해주세요' })
+        const testResultInfo = await interfaces.createTestInfo(null, coffeeIndex, productIndex)
+        const coffeeResult = await interfaces.getItemInfo(coffeeIndex, null)
+        const productResult = await interfaces.getItemInfo(productIndex, null)
+        return res.status(200).send({ testResultInfo, coffeeResult, productResult })
       }
     } catch {
       return res.status(404).send({ message: '설문조사를 다시 진행해주세요' })

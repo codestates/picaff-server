@@ -35,7 +35,6 @@ const addLiked = async (req: Request, res: Response) => {
             liked.userId = id
             liked.itemId = itemId
             await getRepository(Liked).save(liked)
-
             return res.status(200).send(liked)
           }
         } else {
