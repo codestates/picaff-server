@@ -6,7 +6,6 @@ import { kakaoProperties } from '@interface/type'
 
 const kakaoOauth = async (req: Request, res: Response) => {
   const access_token: string = req.body.access_token
-
   try {
     const verifyTokenInfo = await axios({
       method: 'POST',
@@ -16,22 +15,23 @@ const kakaoOauth = async (req: Request, res: Response) => {
         'Authorization': `Bearer ${access_token}`,
       },
     })
-
     const id: string = verifyTokenInfo.data.id
     const properties: kakaoProperties = verifyTokenInfo.data.properties
 
     if (verifyTokenInfo.status === 200) {
-      const checkUser = await interfaces.getKakaoUserInfo('KaKaoUser@' + id)
+      const checkUser = await interfaces.getKakaoUserInfo('kakaoUser' + id)
       if (checkUser) {
         const accessToken = token.generateAccessToken(
           checkUser.id,
           checkUser.email,
-          checkUser.userName
+          checkUser.userName,
+          'OAuth'
         )
         const refreshToken = token.generateRefreshToken(
           checkUser.id,
           checkUser.email,
-          checkUser.userName
+          checkUser.userName,
+          'OAuth'
         )
         return res
           .status(200)
@@ -46,24 +46,25 @@ const kakaoOauth = async (req: Request, res: Response) => {
             },
           })
       } else {
-        const kakaoOauthIdType = 'Oauth' // id type 추가
         await interfaces.createUser(
-          'KaKaoUser@' + `${id}`,
+          'kakaoUser' + `${id}`,
           properties.nickname,
           'kakaoOauth',
-          kakaoOauthIdType // id type 추가
+          'OAuth'
         )
-        const oauthUserInfo = await interfaces.getKakaoUserInfo('KaKaoUser@' + id)
+        const oauthUserInfo = await interfaces.getKakaoUserInfo('kakaoUser' + id)
         if (oauthUserInfo !== undefined) {
           const accessToken = token.generateAccessToken(
             oauthUserInfo.id,
             oauthUserInfo.email,
-            oauthUserInfo.userName
+            oauthUserInfo.userName,
+            'OAuth'
           )
           const refreshToken = token.generateRefreshToken(
             oauthUserInfo.id,
             oauthUserInfo.email,
-            oauthUserInfo.userName
+            oauthUserInfo.userName,
+            'OAuth'
           )
           return res
             .status(201)

@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import { default as interfaces } from '@interface/index'
 import crypt from '@middleware/bcrypt'
-// 이메일로 유저 체크 >  //
+
 const signUp = async (req: Request, res: Response) => {
   try {
     const isSignUpUser = await interfaces.isCheckedUser(req.body.email)
@@ -13,19 +13,19 @@ const signUp = async (req: Request, res: Response) => {
       } else {
         const password = await crypt.cryptPassword(req.body.password)
         if (!password) return res.status(404).send({ message: '정확한 정보를 입력해 주십시오.' })
-        const normalUserIdType = 'normal' // id type 추가
         const user = await interfaces.createUser(
           req.body.email,
           req.body.userName,
           password,
-          normalUserIdType // id type 추가
+          'normal'
         )
-        const userInfo = await interfaces.getUserInfo(user.email)
-        const { id, email, userName } = userInfo
+        const userInfo = await interfaces.getUserInfo(user.email, user.type)
+        const { id, email, userName, type } = userInfo
         res.status(201).send({
           id: id,
           email: email,
           userName: userName,
+          type: type,
         })
       }
     }

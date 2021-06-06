@@ -9,11 +9,13 @@ export type allUserInfo = {
   userName: string
   email: string
   password: string
+  type: string
 }
 export type tokenUser = {
   id: number
   userName: string
   email: string
+  type: string
   iat: number
   exp: number
 }
