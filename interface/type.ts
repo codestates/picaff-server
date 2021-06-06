@@ -1,8 +1,8 @@
 export type userInfo = {
   id: number
   userName: string
-  email: string,
-  type: string
+  email: string
+  type?: string
 }
 export type allUserInfo = {
   id: number
