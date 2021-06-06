@@ -25,6 +25,7 @@ const userInfo = async (req: Request, res: Response) => {
         id: userInfo.id,
         userName: userInfo.userName,
         email: userInfo.email,
+        type: userInfo.type,
       }
       const testResult = await Promise.all(
         testInfo.map(async (data) => {
