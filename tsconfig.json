@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es5", "es6", "dom"],
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
@@ -19,8 +19,10 @@
     "paths": {
       "@interface/*": ["interface/*"],
       "@entity/*": ["src/entity/*"],
-      "@middleware/*": ["middleware/*"]
-    }
+      "@middleware/*": ["middleware/*"],
+      "@controllers/*": ["controllers/*"]
+    },
+    "noImplicitAny": false // ts에서 anytype사용 가능
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
