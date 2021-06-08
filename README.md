@@ -1,3 +1,4 @@
+
 # About Us
 
 ### Period
@@ -142,3 +143,4 @@
 <br />
 
 [🎈 For more details about PICAFF project, please check our Wiki!](https://github.com/codestates/picaff-client/wiki)
+
